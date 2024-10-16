@@ -1,7 +1,10 @@
+import ViewDepartments from "../components/ViewDepartments/ViewDepartments"
 
 const Departments = () => {
     return (
-      <div>Departments</div>
+      <>
+        <ViewDepartments />
+      </>
     )
   }
   

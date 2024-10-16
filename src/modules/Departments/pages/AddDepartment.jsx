@@ -1,7 +1,10 @@
+import AddDepartmentForm from "../components/AddDepartmentForm/AddDepartmentForm"
 
 const AddDepartment = () => {
   return (
-    <div>AddDepartment</div>
+    <>
+      <AddDepartmentForm />
+    </>
   )
 }
 

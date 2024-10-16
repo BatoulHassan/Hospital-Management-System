@@ -1,20 +1,43 @@
-import {Box, InputBase, IconButton} from '@mui/material'
+import {Box, InputBase, IconButton, Typography, Menu, MenuItem} from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import SettingsIcon from '@mui/icons-material/Settings';
 import PersonIcon from '@mui/icons-material/Person';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setIsCollapsed } from '../../store/slices/sidebarSlice';
 import { HeaderBox, MenuIconButton, SearchBox } from './HeaderStyle';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getAccountInfo } from '../../modules/Account/store/slices/accountSlice';
 
 const Header = () => {
 
-   const dispatch = useDispatch()
+   const { roles } = useSelector(state => state.auth)
+   const { accountInfo } = useSelector(state => state.account)
 
+   const [anchorEl, setAnchorEl] = useState(null);
+   const dispatch = useDispatch()
+   const navigate = useNavigate()
+
+   useEffect(() => {
+    dispatch(getAccountInfo())
+   }, [])
+   
    const openSidebar = () => {
       dispatch(setIsCollapsed(true))
    }
+
+   const handleMenu = (event) => {
+      setAnchorEl(event.currentTarget);
+    }
+
+    const handleClose = () => {
+      setAnchorEl(null);
+    }
+
+    const routToAccount = () => {
+      navigate('/admin/account')
+      handleClose()
+    }
 
   return (
     <HeaderBox>
@@ -27,18 +50,36 @@ const Header = () => {
            <SearchIcon/>
          </IconButton>
        </SearchBox>
-       <Box>
-        <IconButton>
-           <NotificationsIcon/>
-        </IconButton>
 
-        <IconButton>
-           <SettingsIcon/>
-        </IconButton>
+       <Box sx={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
+        <Typography variant='body2'>{accountInfo?.name}</Typography>
 
-        <IconButton>
+        <IconButton onClick={handleMenu}>
            <PersonIcon/>
         </IconButton>
+         {
+          roles === 'admin' &&
+         
+          <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>Settings</MenuItem>
+                <MenuItem onClick={routToAccount}>My account</MenuItem>
+          </Menu>
+        }
        </Box>
     </HeaderBox>
   )

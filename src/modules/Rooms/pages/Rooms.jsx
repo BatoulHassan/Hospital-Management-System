@@ -1,7 +1,10 @@
+import ViewRooms from "../components/ViewRooms/ViewRooms"
 
 const Rooms = () => {
   return (
-    <div>Rooms</div>
+    <>
+      <ViewRooms />
+    </>
   )
 }
 
