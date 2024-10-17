@@ -1,22 +1,20 @@
 import { Snackbar, Alert } from '@mui/material'
-import { useDispatch } from 'react-redux'
-import { hideAlert } from '../../store/slices/alertSlice'
 import PropTypes from 'prop-types'; 
-import { memo } from 'react';
+import { memo, useState } from 'react';
 
 const AlertBox = ({open, message}) => {
 
-  const dispatch = useDispatch()
-
+  const [isOpen, setIsOpen] = useState(open)
+  
   const handleCloseAlert = () => {
-    dispatch(hideAlert())
+    setIsOpen(false)
   }
 
   return (
     <Snackbar   
            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-           open={open}   
-           autoHideDuration={3000}   
+           open={isOpen}   
+           autoHideDuration={2000}   
            onClose={handleCloseAlert}>
 
            <Alert onClose={handleCloseAlert} severity="success">  

@@ -6,12 +6,11 @@ import { useFormik } from "formik"
 import * as Yup from 'yup';  
 import { updateDepartment } from "../../store/slices/editDepartmentSlice"
 import AlertBox from '../../../../components/AlertBox/AlertBox'
-import { showAlert } from "../../../../store/slices/alertSlice"
 
 const EditDepartmentForm = () => {
 
-    const { departments } = useSelector(state => state.ViewDepartments)
-    const { open } = useSelector(state => state.alert)
+    const { departments } = useSelector(state => state.viewDepartments)
+    const { message, error } = useSelector(state => state.editDepartment)
 
     const {id} = useParams()
     const department = departments?.find(item => item.id === Number(id))
@@ -31,7 +30,6 @@ const EditDepartmentForm = () => {
       onSubmit: (values) => {
         dispatch(updateDepartment(values))
         resetForm()
-        dispatch(showAlert())
       }
     })
 
@@ -63,8 +61,9 @@ const EditDepartmentForm = () => {
           </Box>
          
         </form>
+        {message && <AlertBox open={true} message={message} />}
+        {error && <Typography variant='body2' color='error'>{error}</Typography>}
      </FormPaper>
-     {open && <AlertBox open={open} message='Department Updated Successfully' /> }
   </Box>
   )
 }

@@ -37,7 +37,7 @@ export const AddTextField = styled(TextField)(() => ({
 export const AddButton = styled(Button)(() => ({
     background: '#2e7c67',
     color: 'white',
-    width: '88px',
+    textTransform: 'capitalize',
     display: 'block'
  }))
 

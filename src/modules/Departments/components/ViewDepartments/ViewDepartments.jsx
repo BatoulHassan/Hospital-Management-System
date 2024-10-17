@@ -9,11 +9,11 @@ import { useNavigate } from "react-router-dom"
 
 const ViewDepartments = () => {
 
-    const {departments, loading} = useSelector(state => state.ViewDepartments)
+    const {departments, loading, error} = useSelector(state => state.viewDepartments)
     const [openDialog, setOpenDialog] = useState(false)
     const [idToDelete, setIdToDelete] = useState(null)
     const [openSnackbar, setOpenSnackbar] = useState(false);  
-
+    console.log(departments)
     const dispatch = useDispatch()
     const navigate = useNavigate()
  
@@ -44,6 +44,7 @@ const ViewDepartments = () => {
   return (
     <Box sx={{p: '1rem'}}>
         {loading && <h3>Loading...</h3>}
+        {!loading &&  error && <h5>{error}</h5>}
         {!loading && departments && 
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 600 }}>
@@ -51,6 +52,7 @@ const ViewDepartments = () => {
               <TableRow>
                     <TableCell>ID</TableCell>
                     <TableCell>Name</TableCell>
+                    <TableCell>Total Rooms</TableCell>
                     <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -61,6 +63,7 @@ const ViewDepartments = () => {
                 <StyledTableRow key={department.id}>
                   <TableCell>{department.id}</TableCell>
                   <TableCell>{department.name}</TableCell>
+                  <TableCell>{department.rooms.length}</TableCell>
                   <TableCell>
                     <ActionButton sx={{mr: '0.5rem'}}>Details</ActionButton>
                     <ActionButton sx={{mr: '0.5rem'}} onClick={() => {navigate(`editDepartment/${department.id}`)}}> Edit

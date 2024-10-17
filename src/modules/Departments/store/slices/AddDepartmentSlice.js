@@ -4,7 +4,7 @@ import axiosInstance from '../../../../utils/axios.jsx'
 export const addNewDepartment = createAsyncThunk("addDepartment/addNewDepartment", async (data) => {
     
     const response = await axiosInstance.post('/departments', data)
-    if (response.status === 200) {  
+    if (response.status === 201) {  
         console.log(response)
         return response.data; 
       } else {  
@@ -15,7 +15,8 @@ export const addNewDepartment = createAsyncThunk("addDepartment/addNewDepartment
 const initialState= {  
     department: null,  
     loading: false,  
-    error: null,  
+    error: null,
+    message: '' 
   }
 
   const addDepartmentSlice = createSlice({
@@ -26,14 +27,15 @@ const initialState= {
             state.loading = true
         }),
         builder.addCase(addNewDepartment.fulfilled, (state, action) => {
-            console.log(action.payload)
             state.loading = false
             state.department = action.payload
+            state.message = 'Department added successfully'
         })
         builder.addCase(addNewDepartment.rejected, (state, action) => {
           state.loading = false
           state.department = null
-          state.error = action.error.message;
+          state.error = action.error.message
+          state.message = ''
       })
     }
 })

@@ -6,17 +6,20 @@ import addDepartmentSlice from '../modules/Departments/store/slices/AddDepartmen
 import viewSpecializationsSlice from '../modules/Doctors/store/slices/viewSpecializationsSlice'
 import viewDepartmentsSlice from '../modules/Departments/store/slices/viewDepartmentsSlice'
 import editPasswordSlice from '../modules/Account/store/slices/editPasswordSlice'
-import alertSlice from './slices/alertSlice'
-
+import addRoomSlice from '../modules/Rooms/store/slices/addRoomSlice'
+import viewRoomsSlice from '../modules/Rooms/store/slices/viewRoomsSlice'
+import editDepartmentSlice from '../modules/Departments/store/slices/editDepartmentSlice'
 const reducers = {
     reducer: {
       sidebar: sidebarSlice,
       auth: authSlice,
       account: accountSlice,
       editPassword: editPasswordSlice ,
-      alert: alertSlice ,
-      ViewDepartments: viewDepartmentsSlice,
+      viewDepartments: viewDepartmentsSlice,
       addDepartment: addDepartmentSlice,
+      editDepartment: editDepartmentSlice,
+      viewRooms: viewRoomsSlice,
+      addRoom: addRoomSlice,
       specializations: viewSpecializationsSlice
     },
   };

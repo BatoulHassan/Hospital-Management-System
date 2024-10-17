@@ -13,7 +13,8 @@ export const updateDepartment = createAsyncThunk("editDepartment/updateDepartmen
 
 const initialState= {  
     department: null,   
-    error: null,  
+    error: null,
+    message: ''
   }
 
 const editDepartmentSlice = createSlice({
@@ -21,12 +22,14 @@ const editDepartmentSlice = createSlice({
     initialState,
     extraReducers: (builder) => {
         builder.addCase(updateDepartment.fulfilled, (state, action) => {
-            console.log(action.payload)
             state.department = action.payload
+            state.error = null
+            state.message = 'Department updated successfully!'
         })
         builder.addCase(updateDepartment.rejected, (state, action) => {
             state.department = null
-            state.error = action.error.message;
+            state.error = action.error.message
+            state.message = ''
         })
     }
 })

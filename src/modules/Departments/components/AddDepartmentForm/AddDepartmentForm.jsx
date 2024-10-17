@@ -6,14 +6,13 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik'
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../../../../components/AlertBox/AlertBox';
-import { showAlert } from '../../../../store/slices/alertSlice';
 
 const AddDepartmentForm = () => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { open } = useSelector(state => state.alert)
-
+  const {message, error} = useSelector(state => state.addDepartment)
+ console.log('message: ', message)
   const { values, handleChange, handleBlur, handleSubmit, touched, errors, resetForm } = useFormik({
     initialValues: {  
       name: '',  
@@ -26,7 +25,6 @@ const AddDepartmentForm = () => {
     onSubmit: (values) => {  
       dispatch(addNewDepartment(values)) 
       resetForm();
-      dispatch(showAlert())
     }, 
   })
 
@@ -57,8 +55,10 @@ const AddDepartmentForm = () => {
               <AddButton onClick={handleNavigate}>Back to departments</AddButton>
             </Box>
       </form>
+      {message && <AlertBox open={true} message={message} />}
+      {error && <Typography variant='body2' color='error'>{error}</Typography>}
     </FormPaper>
-    {open && <AlertBox open={open} message='Deprtment added successfully'/>}
+    
   </Box>
   )
 }

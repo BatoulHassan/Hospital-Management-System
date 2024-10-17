@@ -15,14 +15,20 @@ import { useEffect, useState } from "react";
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { logout } from "../../../store/slices/authSlice";
+import { getAccountInfo } from "../../../modules/Account/store/slices/accountSlice";
 
 const AdminSidebar = () => {
 
   const {isCollapsed} = useSelector(state => state.sidebar)
   const {isAuthenticated} = useSelector(state => state.auth)
+  const {accountInfo} = useSelector(state => state.account)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    dispatch(getAccountInfo())
+  }, [])
 
   const closeSidebar = () => {
     dispatch(setIsCollapsed(false))
@@ -57,7 +63,7 @@ const AdminSidebar = () => {
            </LogoBox>
            <ProfileBox>
                {/* <img src={profileImg} alt='profileImg' style={{width: '40px', height: '40px', borderRadius: '50%'}}/> */}
-               <Typography variant="h6" sx={{color: '#595353'}}>John Doe</Typography>
+               <Typography variant="h6" sx={{color: '#595353'}}>{accountInfo?.name}</Typography>
            </ProfileBox>
            <List>
 

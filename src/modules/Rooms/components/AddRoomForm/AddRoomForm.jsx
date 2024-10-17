@@ -1,50 +1,119 @@
-import { Box, MenuItem } from '@mui/material'
+import { Box, MenuItem, Typography } from '@mui/material'
 import { InputField, FormPaper, AddButton } from './style'
+import { useDispatch, useSelector } from 'react-redux'
+import { useFormik } from 'formik'
+import * as Yup from 'yup';  
+import { addNewRoom } from '../../store/slices/addRoomSlice';
+import { useEffect } from 'react';
+import { getDepartments } from '../../../Departments/store/slices/viewDepartmentsSlice';
+import AlertBox from '../../../../components/AlertBox/AlertBox';
+import { useNavigate } from 'react-router-dom';
 
 const AddRoomForm = () => {
+
+  const {departments, loading} = useSelector(state => state.viewDepartments)
+  const {message, error} = useSelector(state => state.addRoom)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    dispatch(getDepartments())
+  }, [])
+
+  //console.log(departments)
+  const { values, handleChange, handleBlur, handleSubmit, touched, errors, resetForm } = useFormik({
+    initialValues: {  
+      department_id: '',
+      number: '',
+      status: '',
+    },
+    validationSchema: Yup.object({  
+      department_id: Yup.string().required('Department is required'),
+      number: Yup.number().required('Room number is required'),
+      status: Yup.string().required('Room status is required'),
+    }),
+    onSubmit: (values) => {
+      dispatch(addNewRoom(values))
+      resetForm()
+    }, 
+  })
+
+  const handleNavigate = () => {
+    navigate('/admin/rooms')
+  }
   return (
     <Box sx={{padding: '1rem'}}>
-    <FormPaper>
-      <form>
-        <InputField variant='outlined' 
-                     type='number'
-                     label='Room ID'
-                     sx={{width: '50%', mb: '1rem'}}  />
-
-        <InputField  select
+     {loading && <Typography variant='h3'>Loading...</Typography>}
+     {!loading && departments && 
+      <FormPaper>
+        <form onSubmit={handleSubmit}>
+          <Box sx={{mb: '1rem'}}>
+            <InputField  select
                      required
-                     label='Departments ID'      
-                     sx={{mb: '1rem', width: '50%', display: 'flex'}}>
-                    
-        </InputField>
+                     label='Department'
+                     name='department_id'
+                     value={values.department_id}
+                     onChange={handleChange}
+                     onBlur={handleBlur}      
+                     sx={{width: {xs: '100%', sm: '50%'}, display: 'flex'}}>
+                    {
+                      departments?.map(department => (
+                        <MenuItem key={department.id} value={department.id}>
+                          {department.name}
+                        </MenuItem>
+                      ))
+                    }
+            </InputField>
+            {touched.department_id && errors.department_id &&
+                        <Typography variant='body2' color='error'>{errors.department_id}</Typography>  
+            }
+          </Box>
 
-         <InputField variant='outlined' 
-                     type='number'
-                     label='Room Number'
-                     sx={{width: '50%', mb: '1rem'}}  />
+          <Box sx={{mb: '1rem'}}>
+            <InputField variant='outlined' 
+                    type='text'
+                    name= 'number'
+                    label='Room Number'
+                    value={values.number}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    sx={{width: {xs: '100%', sm: '50%'}}}  />
+                    {touched.number && errors.number &&
+                        <Typography variant='body2' color='error'>{errors.number}</Typography>  
+                     }
+          </Box>
 
-         <InputField select
-                     required
-                     label='Room Type'      
-                     sx={{mb: '1rem', width: '50%', display: 'flex'}}>
-                  <MenuItem value='ICU'>ICU</MenuItem>
-                  <MenuItem value='private'>private</MenuItem>
-                  <MenuItem value='semi-private'>semi-private</MenuItem>
-        </InputField>
-
-        <InputField select
+          <Box sx={{mb: '1rem'}}>
+            <InputField select
                      required
                      label='Room Status'
                      name='status'
-                     sx={{mb: '1rem', width: '50%', display: 'flex'}}>
+                     value={values.status}
+                     onChange={handleChange}
+                     onBlur={handleBlur}
+                     sx={{width: {xs: '100%', sm: '50%'}, display: 'flex'}}>
                   <MenuItem value='vacant'>vacant</MenuItem>
                   <MenuItem value='occupied'>occupied</MenuItem>
                   <MenuItem value='maintenance'>maintenance</MenuItem>
-        </InputField>
-
-        <AddButton type='submit'>Add</AddButton>
-      </form>
-    </FormPaper>
+            </InputField>
+            {touched.status && errors.status &&
+                  <Typography variant='body2' color='error'>{errors.status}</Typography>  
+            }
+          </Box>
+          <Box sx={{display: 'flex', 
+                    gap: '0.5rem', 
+                    justifyContent: {xs: 'space-between', sm: 'unset'}}}>
+             <AddButton type='submit'>Add</AddButton>
+             <AddButton onClick={handleNavigate}>Back to rooms</AddButton>
+          </Box>
+          
+          
+        </form>
+          {message && <AlertBox open={true} message={message}/>}
+          {error && <Typography variant='body2' color='error'>{error}</Typography>}
+      </FormPaper>
+      
+      }
   </Box>
   )
 }

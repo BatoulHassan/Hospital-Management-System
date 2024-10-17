@@ -37,6 +37,7 @@ const initialState = {
         builder.addCase(getDepartments.fulfilled, (state, action) => {
             state.loading = false
             state.departments = action.payload
+            state.error = null
         })
         builder.addCase(getDepartments.rejected, (state, action) => {
             state.loading = false
