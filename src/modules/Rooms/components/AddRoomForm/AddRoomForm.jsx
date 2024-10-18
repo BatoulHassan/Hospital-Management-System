@@ -3,7 +3,7 @@ import { InputField, FormPaper, AddButton } from './style'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import * as Yup from 'yup';  
-import { addNewRoom } from '../../store/slices/addRoomSlice';
+import { addNewRoom, clearMessage } from '../../store/slices/addRoomSlice';
 import { useEffect } from 'react';
 import { getDepartments } from '../../../Departments/store/slices/viewDepartmentsSlice';
 import AlertBox from '../../../../components/AlertBox/AlertBox';
@@ -12,12 +12,13 @@ import { useNavigate } from 'react-router-dom';
 const AddRoomForm = () => {
 
   const {departments, loading} = useSelector(state => state.viewDepartments)
-  const {message, error} = useSelector(state => state.addRoom)
+  const {message, error, loadingAdd} = useSelector(state => state.addRoom)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(getDepartments())
+    dispatch(clearMessage())
   }, [])
 
   //console.log(departments)
@@ -103,7 +104,9 @@ const AddRoomForm = () => {
           <Box sx={{display: 'flex', 
                     gap: '0.5rem', 
                     justifyContent: {xs: 'space-between', sm: 'unset'}}}>
-             <AddButton type='submit'>Add</AddButton>
+             <AddButton type='submit'>
+              {loadingAdd ? "Adding..." : "Add"}
+             </AddButton>
              <AddButton onClick={handleNavigate}>Back to rooms</AddButton>
           </Box>
           

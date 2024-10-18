@@ -11,11 +11,13 @@ import Rooms from './modules/Rooms/pages/Rooms'
 import { Provider } from "react-redux"
 import store from "./store"
 import AddRooms from "./modules/Rooms/pages/AddRooms"
+import EditRoom from './modules/Rooms/pages/EditRoom'
 import AddDoctor from "./modules/Doctors/pages/AddDoctor"
 import Doctors from "./modules/Doctors/pages/Doctors"
 import Account from "./modules/Account/pages/Account"
 import EditAccount from './modules/Account/pages/EditAccount'
 import Specializations from "./modules/Doctors/pages/Specializations"
+import RoomsOfDepartment from "./modules/Departments/pages/RoomsOfDepartment"
 
 function App() {
  
@@ -30,8 +32,10 @@ function App() {
            <Route path='departments' element={<Departments />} />
            <Route path='addDepartment' element={<AddDepartment />} />
            <Route path='departments/editDepartment/:id' element={<EditDepartment />} />
+           <Route path='departments/viewRooms/:id' element={<RoomsOfDepartment />} />
            <Route path='rooms' element={<Rooms />} />
            <Route path='addRoom' element={<AddRooms />} />
+           <Route path='rooms/editRoom/:id' element={<EditRoom />} />
            <Route path='doctors' element={<Doctors />} />
            <Route path='addDoctor' element={<AddDoctor />} />
            <Route path="account" element={<Account />} />

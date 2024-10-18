@@ -22,10 +22,16 @@ const initialState= {
 const addRoomSlice = createSlice({
     name: 'addRoom',
     initialState,
+    reducers:{
+        clearMessage:(state) => {
+            state.message = ''
+            state.error = null
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(addNewRoom.pending, (state) => {
             state.loadingAdd = true
-        }),
+        })
         builder.addCase(addNewRoom.fulfilled, (state, action) => {
             console.log(action.payload)
             state.loadingAdd = false
@@ -41,4 +47,5 @@ const addRoomSlice = createSlice({
     }
 })
 
+export const {clearMessage} = addRoomSlice.actions
 export default addRoomSlice.reducer

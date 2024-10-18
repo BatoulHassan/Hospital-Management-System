@@ -26,10 +26,22 @@ import axiosInstance from '../../../../utils/axios.jsx'
     }  
   );  
 
+  export const deleteRoom = createAsyncThunk("viewRoom/deleteRoom", async (id) => {
+    const response = await axiosInstance.delete(`/rooms/${id}`)
+    console.log(response)
+    if (response.status === 204) { 
+        return response
+      } else {  
+        throw new Error("Failed deleting room");  
+      } 
+  });
+
 const initialState = {  
-    rooms: null, 
+    rooms: null,
+    roomId: null,
     loading: false,  
-    error: null,  
+    error: null, 
+    status: '' 
   }
 
   const viewRoomsSlice = createSlice({
@@ -49,6 +61,10 @@ const initialState = {
            state.loading = false
            state.rooms = null
            state.error = action.payload;
+    })
+    builder.addCase(deleteRoom.fulfilled, (state, action) => {
+      console.log(action.payload)
+      state.status = 'succeeded'
   })
     }
   })

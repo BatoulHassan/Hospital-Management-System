@@ -21,6 +21,8 @@ const ViewDepartments = () => {
         dispatch(getDepartments())
     }, [])
 
+    //const showRooms = () => {}
+
     const handleDeleteClick = (id) => {  
       setIdToDelete(id);  
       setOpenDialog(true);  
@@ -65,8 +67,13 @@ const ViewDepartments = () => {
                   <TableCell>{department.name}</TableCell>
                   <TableCell>{department.rooms.length}</TableCell>
                   <TableCell>
-                    <ActionButton sx={{mr: '0.5rem'}}>Details</ActionButton>
-                    <ActionButton sx={{mr: '0.5rem'}} onClick={() => {navigate(`editDepartment/${department.id}`)}}> Edit
+                    <ActionButton sx={{mr: '0.5rem'}}
+                                  onClick={() => {navigate(`viewRooms/${department.id}`)}}>
+                                    Rooms
+                    </ActionButton>
+                    <ActionButton sx={{mr: '0.5rem'}} 
+                                  onClick={() => {navigate(`editDepartment/${department.id}`)}}>
+                                     Edit
                     </ActionButton>
                     <ActionButton onClick={() => handleDeleteClick(department.id)}>Delete</ActionButton>
                   </TableCell>

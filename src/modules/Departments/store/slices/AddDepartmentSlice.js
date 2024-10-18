@@ -22,6 +22,12 @@ const initialState= {
   const addDepartmentSlice = createSlice({
     name: 'addDepartment',
     initialState,
+    reducers: {
+      clearAddingMessage:(state) => {
+        state.message = ''
+        state.error = null
+      }
+    },
     extraReducers: (builder) => {
         builder.addCase(addNewDepartment.pending, (state) => {
             state.loading = true
@@ -40,4 +46,5 @@ const initialState= {
     }
 })
 
+export const {clearAddingMessage} = addDepartmentSlice.actions
 export default addDepartmentSlice.reducer

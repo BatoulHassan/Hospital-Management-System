@@ -44,8 +44,8 @@ const initialState = {
             state.departments = []
             state.error = action.error.message;
         })
-        builder.addCase(deleteDepartment.fulfilled, (state, action) => {
-          console.log(action.payload)
+        builder.addCase(deleteDepartment.fulfilled, (state) => {
+          //console.log(action.payload)
           state.status = 'succeeded'
       })
         

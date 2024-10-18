@@ -4,20 +4,25 @@ import { InputField, FormPaper, AddButton } from './style'
 import { useSelector, useDispatch } from "react-redux"
 import { useFormik } from "formik"
 import * as Yup from 'yup';  
-import { updateDepartment } from "../../store/slices/editDepartmentSlice"
+import { clearEditDepartmentMessage, updateDepartment } from "../../store/slices/editDepartmentSlice"
 import AlertBox from '../../../../components/AlertBox/AlertBox'
+import { useEffect } from "react"
 
 const EditDepartmentForm = () => {
 
     const { departments } = useSelector(state => state.viewDepartments)
-    const { message, error } = useSelector(state => state.editDepartment)
+    const { message, error, loading } = useSelector(state => state.editDepartment)
 
     const {id} = useParams()
     const department = departments?.find(item => item.id === Number(id))
     const dispatch = useDispatch()
     const navigate = useNavigate()
+
+    useEffect(() => {
+      dispatch(clearEditDepartmentMessage())
+    }, [])
   
-    const {values, handleChange, handleSubmit, handleBlur, touched, errors, resetForm} = useFormik({
+    const {values, handleChange, handleSubmit, handleBlur, touched, errors} = useFormik({
       initialValues:{
         id: department.id,
         name: department.name
@@ -29,7 +34,7 @@ const EditDepartmentForm = () => {
       }),
       onSubmit: (values) => {
         dispatch(updateDepartment(values))
-        resetForm()
+        //resetForm()
       }
     })
 
@@ -56,7 +61,9 @@ const EditDepartmentForm = () => {
                      }
           </Box>
           <Box sx={{display: 'flex', gap: '1rem'}}>
-            <AddButton type='submit' sx={{width: '88px'}}>Edit</AddButton>
+            <AddButton type='submit' sx={{width: '88px'}}>
+              {loading ? "Editting..." : "Edit"}
+            </AddButton>
             <AddButton onClick={handleNavigate}>Back to departments</AddButton>
           </Box>
          

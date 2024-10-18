@@ -9,6 +9,8 @@ import editPasswordSlice from '../modules/Account/store/slices/editPasswordSlice
 import addRoomSlice from '../modules/Rooms/store/slices/addRoomSlice'
 import viewRoomsSlice from '../modules/Rooms/store/slices/viewRoomsSlice'
 import editDepartmentSlice from '../modules/Departments/store/slices/editDepartmentSlice'
+import editRoomSlice from '../modules/Rooms/store/slices/editRoomSlice'
+
 const reducers = {
     reducer: {
       sidebar: sidebarSlice,
@@ -20,6 +22,7 @@ const reducers = {
       editDepartment: editDepartmentSlice,
       viewRooms: viewRoomsSlice,
       addRoom: addRoomSlice,
+      editRoom: editRoomSlice,
       specializations: viewSpecializationsSlice
     },
   };

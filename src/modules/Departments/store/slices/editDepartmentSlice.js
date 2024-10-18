@@ -11,7 +11,8 @@ export const updateDepartment = createAsyncThunk("editDepartment/updateDepartmen
       } 
   });
 
-const initialState= {  
+const initialState= { 
+    loading: false, 
     department: null,   
     error: null,
     message: ''
@@ -20,13 +21,24 @@ const initialState= {
 const editDepartmentSlice = createSlice({
     name: 'editDepartment',
     initialState,
+    reducers: {
+      clearEditDepartmentMessage:(state) => {
+        state.message = ''
+        state.error = null
+      }
+    },
     extraReducers: (builder) => {
+        builder.addCase(updateDepartment.pending, (state) => {
+            state.loading = true
+        })
         builder.addCase(updateDepartment.fulfilled, (state, action) => {
+            state.loading = false
             state.department = action.payload
             state.error = null
             state.message = 'Department updated successfully!'
         })
         builder.addCase(updateDepartment.rejected, (state, action) => {
+            state.loading = false
             state.department = null
             state.error = action.error.message
             state.message = ''
@@ -34,4 +46,5 @@ const editDepartmentSlice = createSlice({
     }
 })
 
+export const {clearEditDepartmentMessage} = editDepartmentSlice.actions
 export default editDepartmentSlice.reducer
