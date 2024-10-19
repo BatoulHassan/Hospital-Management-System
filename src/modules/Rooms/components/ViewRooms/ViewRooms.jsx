@@ -1,19 +1,21 @@
 import { Box, TableContainer, Paper, Table, TableHead, 
          TableRow, TableCell, TableBody, Typography,
-         Dialog, DialogActions, DialogContent, DialogContentText, 
-         DialogTitle, Button, Snackbar, Alert } from "@mui/material"
+       } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { deleteRoom, getRooms } from "../../store/slices/viewRoomsSlice"
+import { getRooms } from "../../store/slices/viewRoomsSlice"
 import { ActionButton, StyledTableRow } from "./style"
 import { useNavigate } from "react-router-dom"
+import PageTitle from "../../../../components/PageTitle/PageTitle"
+import DeleteDialog from "../../../../components/DeleteDialog/DeleteDialog"
+import { deleteRoomItem } from "../../store/slices/deleteRoomSlice"
 
 const ViewRooms = () => {
     const {rooms, loading, error} = useSelector(state => state.viewRooms)
     const [openDialog, setOpenDialog] = useState(false)
     const [idToDelete, setIdToDelete] = useState(null)
     const [openSnackbar, setOpenSnackbar] = useState(false)
-console.log(rooms)
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -21,7 +23,7 @@ console.log(rooms)
         dispatch(getRooms())
     }, [])
 
-    const handleDeleteRoom = (id) => {  
+    const handleDeleteClick = (id) => {  
       setIdToDelete(id);  
       setOpenDialog(true);  
     }
@@ -32,9 +34,14 @@ console.log(rooms)
     }
 
     const handleConfirmDelete = () => {
-      dispatch(deleteRoom(idToDelete))
-      setOpenSnackbar(true)
-      handleDialogClose()
+      dispatch(deleteRoomItem(idToDelete))
+      .then(() => {  
+        setOpenSnackbar(true) 
+        dispatch(getRooms());
+      })
+      .catch((error) => {  
+        console.error("Failed to delete room:", error);  
+      })
     }
 
     const handleSnackbarClose = () => {  
@@ -43,11 +50,12 @@ console.log(rooms)
 
   return (
     <Box sx={{p: '1rem'}}>
+      <PageTitle title="Rooms:" />
       {loading && <Typography variant='h3'>Loading...</Typography>}
       {!loading && error && <Typography variant='h5'>{error}</Typography>}
       {!loading && rooms &&
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 600 }}>
+          <Table sx={{ minWidth: 700 }}>
             <TableHead sx={{background: '#2e7c6747'}}>
               <TableRow>
                     <TableCell>Room ID</TableCell>
@@ -67,7 +75,9 @@ console.log(rooms)
                     <TableCell>{room.status}</TableCell>
                     <TableCell>
                       <ActionButton sx={{mr: '0.5rem'}} onClick={() => {navigate(`editRoom/${room.id}`)}}>Edit</ActionButton>
-                      <ActionButton onClick={() => handleDeleteRoom(room.id)}>Delete</ActionButton>
+                      <ActionButton onClick={() => handleDeleteClick(room.id)}>
+                        Delete
+                      </ActionButton>
                     </TableCell>
                   </StyledTableRow>
                 ))
@@ -77,32 +87,13 @@ console.log(rooms)
         </TableContainer>
       }
 
-<Dialog open={openDialog} onClose={handleDialogClose}>
-           <DialogTitle>Confirm Delete</DialogTitle>
-           <DialogContent>  
-             <DialogContentText>  
-               Are you sure you want to delete this room? 
-             </DialogContentText>  
-           </DialogContent>
-           <DialogActions>  
-              <Button onClick={handleDialogClose} color="primary">  
-                 Cancel  
-              </Button>  
-              <Button onClick={handleConfirmDelete} color="secondary">  
-                 Delete  
-              </Button>  
-           </DialogActions>
-      </Dialog>
+     {idToDelete && <DeleteDialog 
+                         openDialog={openDialog}
+                         handleDialogClose={handleDialogClose}
+                         handleConfirmDelete={handleConfirmDelete}
+                         openSnackbar={openSnackbar}
+                         handleSnackbarClose={handleSnackbarClose}/>}
 
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={openSnackbar}  
-        onClose={handleSnackbarClose}   
-        autoHideDuration={3000}>
-          <Alert onClose={handleSnackbarClose} severity="success">  
-              Room deleted successfully! 
-           </Alert> 
-      </Snackbar>
     </Box>
   )
 }

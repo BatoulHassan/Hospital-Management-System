@@ -18,6 +18,8 @@ import Account from "./modules/Account/pages/Account"
 import EditAccount from './modules/Account/pages/EditAccount'
 import Specializations from "./modules/Doctors/pages/Specializations"
 import RoomsOfDepartment from "./modules/Departments/pages/RoomsOfDepartment"
+import AddSpecialization from "./modules/Doctors/pages/AddSpecialization"
+import EditSpecialization from "./modules/Doctors/pages/EditSpecialization"
 
 function App() {
  
@@ -41,6 +43,8 @@ function App() {
            <Route path="account" element={<Account />} />
            <Route path="editAccount" element={<EditAccount />} />
            <Route path="specializations" element={<Specializations />} />
+           <Route path="addSpecialization" element={<AddSpecialization />} />
+           <Route path='specializations/editSpecialization/:id' element={<EditSpecialization />} />
         </Route>
 
         <Route path='doctor' element={<DoctorDashboard />} >

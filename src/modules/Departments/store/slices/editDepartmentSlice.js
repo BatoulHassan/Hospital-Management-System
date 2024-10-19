@@ -4,7 +4,6 @@ import axiosInstance from '../../../../utils/axios.jsx'
 export const updateDepartment = createAsyncThunk("editDepartment/updateDepartment", async (data) => {
     const response = await axiosInstance.put(`/departments/${data.id}`, data)
     if (response.status === 200) {  
-        console.log(response)
         return response.data; 
       } else {  
         throw new Error("Failed adding new department");  

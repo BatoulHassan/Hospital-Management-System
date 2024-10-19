@@ -1,7 +1,10 @@
+import ViewDoctors from "../components/ViewDoctors/ViewDoctors"
 
 const Doctors = () => {
   return (
-    <div>Doctors</div>
+    <>
+      <ViewDoctors />
+    </>
   )
 }
 

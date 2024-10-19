@@ -26,16 +26,6 @@ import axiosInstance from '../../../../utils/axios.jsx'
     }  
   );  
 
-  export const deleteRoom = createAsyncThunk("viewRoom/deleteRoom", async (id) => {
-    const response = await axiosInstance.delete(`/rooms/${id}`)
-    console.log(response)
-    if (response.status === 204) { 
-        return response
-      } else {  
-        throw new Error("Failed deleting room");  
-      } 
-  });
-
 const initialState = {  
     rooms: null,
     roomId: null,
@@ -50,23 +40,18 @@ const initialState = {
     extraReducers: (builder) => {
       builder.addCase(getRooms.pending, (state) => {
         state.loading = true
-    }),
-        builder.addCase(getRooms.fulfilled, (state, action) => {
+      }),
+      builder.addCase(getRooms.fulfilled, (state, action) => {
             state.loading = false
             state.rooms = action.payload
             state.error = null
-    }),
-    builder.addCase(getRooms.rejected, (state, action) => {
-           console.log(action.payload)
+      }),
+      builder.addCase(getRooms.rejected, (state, action) => {
            state.loading = false
            state.rooms = null
            state.error = action.payload;
-    })
-    builder.addCase(deleteRoom.fulfilled, (state, action) => {
-      console.log(action.payload)
-      state.status = 'succeeded'
-  })
-    }
+      })
+  }
   })
 
   export default viewRoomsSlice.reducer

@@ -143,7 +143,12 @@ const AdminSidebar = () => {
                                               color: isActive ? '#2e7c67' : '#595353',
                                               textDecoration: 'none'})}>
                         <ListItemText sx={{pl: '30px'}} primary="Specializations" />
-                     </NavLink> 
+                     </NavLink>
+                     <NavLink to="addSpecialization" style={({isActive}) => ({
+                                              color: isActive ? '#2e7c67' : '#595353',
+                                              textDecoration: 'none'})}>
+                        <ListItemText sx={{pl: '30px'}} primary="Add Specialization" />
+                     </NavLink>
                 </List>
             </Collapse>
            </List>

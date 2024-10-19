@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import { useFormik } from "formik"
 import { clearEdittingMessage, updateRoom } from "../../store/slices/editRoomSlice"
 import AlertBox from "../../../../components/AlertBox/AlertBox"
+import PageTitle from "../../../../components/PageTitle/PageTitle"
 
 const EditRoomForm = () => {
 
@@ -20,8 +21,6 @@ const EditRoomForm = () => {
     const {id} = useParams()
     
     const room = rooms?.find(item => item.id === Number(id))
-    //console.log(id)
-    //console.log(room)
 
     useEffect(() => {
         dispatch(getDepartments())
@@ -50,7 +49,8 @@ const EditRoomForm = () => {
       }
 
   return (
-    <Box>
+    <Box sx={{p: '1rem'}}>
+      <PageTitle title="Edit Room:" />
       {loading && <Typography variant='h3'>Loading...</Typography>}
       {!loading && departments && 
         <FormPaper>

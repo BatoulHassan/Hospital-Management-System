@@ -7,6 +7,7 @@ import { useFormik } from 'formik'
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../../../../components/AlertBox/AlertBox';
 import { useEffect } from 'react';
+import PageTitle from '../../../../components/PageTitle/PageTitle';
 
 const AddDepartmentForm = () => {
 
@@ -38,7 +39,8 @@ const AddDepartmentForm = () => {
   }
 
   return (
-    <Box sx={{padding: '1rem'}}>
+  <Box sx={{padding: '1rem'}}>
+    <PageTitle title='Add Department:' />
     <FormPaper>
       <form onSubmit={handleSubmit}>
           <Box sx={{mb: '1rem'}}>

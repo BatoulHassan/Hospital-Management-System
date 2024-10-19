@@ -10,17 +10,6 @@ export const getDepartments = createAsyncThunk("viewDepartments/getDepartments",
       } 
   });
 
-  export const deleteDepartment = createAsyncThunk("viewDepartments/deleteDepartment", async (id) => {
-    const response = await axiosInstance.delete(`/departments/${id}`)
-    console.log(response)
-    if (response.status === 204) { 
-        return response
-      } else {  
-        throw new Error("Failed deleting Department");  
-      } 
-  });
-
-  
 const initialState = {  
     departments: [], 
     loading: false,  
@@ -44,10 +33,6 @@ const initialState = {
             state.departments = []
             state.error = action.error.message;
         })
-        builder.addCase(deleteDepartment.fulfilled, (state) => {
-          //console.log(action.payload)
-          state.status = 'succeeded'
-      })
         
     }
   })

@@ -2,10 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from '../../../../utils/axios.jsx'
 
 export const addNewRoom = createAsyncThunk("addRoom/addNewDepartment", async (data) => {
-    //console.log(data)
     const response = await axiosInstance.post('/rooms', data)
     if (response.status === 201) {  
-        //console.log(response)
         return response.data; 
       } else {  
         throw new Error("Failed adding new room");  
@@ -33,7 +31,6 @@ const addRoomSlice = createSlice({
             state.loadingAdd = true
         })
         builder.addCase(addNewRoom.fulfilled, (state, action) => {
-            console.log(action.payload)
             state.loadingAdd = false
             state.room = action.payload
             state.message = 'Room added successfully!'

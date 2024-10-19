@@ -10,6 +10,11 @@ import addRoomSlice from '../modules/Rooms/store/slices/addRoomSlice'
 import viewRoomsSlice from '../modules/Rooms/store/slices/viewRoomsSlice'
 import editDepartmentSlice from '../modules/Departments/store/slices/editDepartmentSlice'
 import editRoomSlice from '../modules/Rooms/store/slices/editRoomSlice'
+import addSpecializationSlice from '../modules/Doctors/store/slices/addSpecializationSlice'
+import editSpecializationSlice from '../modules/Doctors/store/slices/editSpecializationSlice'
+import deleteSpecializationSlice from '../modules/Doctors/store/slices/DeleteSpecializationSlice'
+import deleteRoomSlice from '../modules/Rooms/store/slices/deleteRoomSlice'
+import deleteDepartmentSlice from "../modules/Departments/store/slices/deleteDepartmentSlice"
 
 const reducers = {
     reducer: {
@@ -20,10 +25,16 @@ const reducers = {
       viewDepartments: viewDepartmentsSlice,
       addDepartment: addDepartmentSlice,
       editDepartment: editDepartmentSlice,
+      deleteDepartment: deleteDepartmentSlice,
       viewRooms: viewRoomsSlice,
       addRoom: addRoomSlice,
       editRoom: editRoomSlice,
-      specializations: viewSpecializationsSlice
+      deleteRoom: deleteRoomSlice,
+      specializations: viewSpecializationsSlice,
+      addSpecialization: addSpecializationSlice,
+      editSpecialization: editSpecializationSlice,
+      deleteSpecialization: deleteSpecializationSlice,
+      
     },
   };
 

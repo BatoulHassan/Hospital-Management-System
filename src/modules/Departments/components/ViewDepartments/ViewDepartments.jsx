@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getDepartments, deleteDepartment } from "../../store/slices/viewDepartmentsSlice"
+import { getDepartments } from "../../store/slices/viewDepartmentsSlice"
 import { Box, TableContainer, Paper, Table, TableHead, 
-         TableRow, TableCell, TableBody, Dialog, DialogActions,  
-         DialogContent, DialogContentText, DialogTitle, Button, Snackbar, Alert } from "@mui/material"
+         TableRow, TableCell, TableBody, Typography} from "@mui/material"
 import { StyledTableRow, ActionButton } from './style'
 import { useNavigate } from "react-router-dom"
+import PageTitle from "../../../../components/PageTitle/PageTitle"
+import DeleteDialog from "../../../../components/DeleteDialog/DeleteDialog"
+import { deleteDepartmentItem } from "../../store/slices/deleteDepartmentSlice"
 
 const ViewDepartments = () => {
 
@@ -13,15 +15,13 @@ const ViewDepartments = () => {
     const [openDialog, setOpenDialog] = useState(false)
     const [idToDelete, setIdToDelete] = useState(null)
     const [openSnackbar, setOpenSnackbar] = useState(false);  
-    console.log(departments)
+ 
     const dispatch = useDispatch()
     const navigate = useNavigate()
  
     useEffect(() => {
         dispatch(getDepartments())
     }, [])
-
-    //const showRooms = () => {}
 
     const handleDeleteClick = (id) => {  
       setIdToDelete(id);  
@@ -34,9 +34,17 @@ const ViewDepartments = () => {
     }
 
     const handleConfirmDelete = () => {
-      dispatch(deleteDepartment(idToDelete))
-      setOpenSnackbar(true)
-      handleDialogClose()
+      // dispatch(deleteDepartment(idToDelete))
+      // setOpenSnackbar(true)
+      // handleDialogClose()
+      dispatch(deleteDepartmentItem(idToDelete))
+      .then(() => {  
+        setOpenSnackbar(true) 
+        dispatch(getDepartments());
+      })
+      .catch((error) => {  
+        console.error("Failed to delete department:", error);  
+      })
     }
 
     const handleSnackbarClose = () => {  
@@ -45,7 +53,8 @@ const ViewDepartments = () => {
 
   return (
     <Box sx={{p: '1rem'}}>
-        {loading && <h3>Loading...</h3>}
+        <PageTitle title='Departments:' />
+        {loading && <Typography variant="h2">Loading...</Typography>}
         {!loading &&  error && <h5>{error}</h5>}
         {!loading && departments && 
         <TableContainer component={Paper}>
@@ -84,7 +93,14 @@ const ViewDepartments = () => {
         </TableContainer>
         }
 
-        <Dialog open={openDialog} onClose={handleDialogClose}>
+        {idToDelete && <DeleteDialog 
+                         openDialog={openDialog}
+                         handleDialogClose={handleDialogClose}
+                         handleConfirmDelete={handleConfirmDelete}
+                         openSnackbar={openSnackbar}
+                         handleSnackbarClose={handleSnackbarClose}/>}
+
+        {/* <Dialog open={openDialog} onClose={handleDialogClose}>
            <DialogTitle>Confirm Delete</DialogTitle>
            <DialogContent>  
              <DialogContentText>  
@@ -109,7 +125,7 @@ const ViewDepartments = () => {
           <Alert onClose={handleSnackbarClose} severity="success">  
               Department deleted successfully! 
            </Alert> 
-      </Snackbar>  
+      </Snackbar>   */}
     </Box>
   )
 }

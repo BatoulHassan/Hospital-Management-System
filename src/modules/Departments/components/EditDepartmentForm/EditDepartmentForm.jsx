@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import { clearEditDepartmentMessage, updateDepartment } from "../../store/slices/editDepartmentSlice"
 import AlertBox from '../../../../components/AlertBox/AlertBox'
 import { useEffect } from "react"
+import PageTitle from "../../../../components/PageTitle/PageTitle"
 
 const EditDepartmentForm = () => {
 
@@ -34,7 +35,6 @@ const EditDepartmentForm = () => {
       }),
       onSubmit: (values) => {
         dispatch(updateDepartment(values))
-        //resetForm()
       }
     })
 
@@ -44,6 +44,7 @@ const EditDepartmentForm = () => {
 
   return (
     <Box sx={{padding: '1rem'}}>
+      <PageTitle title="Edit Department:" />
       <FormPaper>
         <form onSubmit={handleSubmit}>
           <Box sx={{mb: '1rem'}}>

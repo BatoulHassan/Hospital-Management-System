@@ -1,4 +1,4 @@
-import { Box, Typography, TableContainer, Paper, Table,
+import { Box, TableContainer, Paper, Table,
          TableHead, TableRow, TableCell, TableBody
          } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
@@ -7,6 +7,7 @@ import { ActionButton, StyledTableRow } from "./style"
 import { useState } from "react"
 import ChangeStatusDialog from "../ChangeStatusDialog/ChangeStatusDialog"
 import { clearEdittingMessage } from "../../../Rooms/store/slices/editRoomSlice"
+import PageTitle from "../../../../components/PageTitle/PageTitle"
 
 const ViewRooms = () => {
 
@@ -34,9 +35,7 @@ const ViewRooms = () => {
     }
   return (
     <Box sx={{p: '1rem'}}>
-      <Typography variant='h6' sx={{color: '#2e7c67', mb: '1rem'}}>
-         ALL rooms in {department.name} department
-      </Typography>
+      <PageTitle title={`All rooms in ${department.name} department`} />
       {department &&
          <TableContainer component={Paper}>
            <Table sx={{ minWidth: 600 }}>

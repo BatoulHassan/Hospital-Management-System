@@ -24,7 +24,6 @@ const ChangeStatusDialog = ({roomTochange, open, handleCloseDialog}) => {
         status: Yup.string().required('Room status is required'),
       }),
       onSubmit: (values) => {
-        console.log(values)
         dispatch(updateRoom(values))
       }, 
     })

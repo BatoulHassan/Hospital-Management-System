@@ -2,10 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from '../../../../utils/axios.jsx'
 
 export const addNewDepartment = createAsyncThunk("addDepartment/addNewDepartment", async (data) => {
-    
     const response = await axiosInstance.post('/departments', data)
     if (response.status === 201) {  
-        console.log(response)
         return response.data; 
       } else {  
         throw new Error("Failed adding new department");  

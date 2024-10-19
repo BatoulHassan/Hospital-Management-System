@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { getDepartments } from '../../../Departments/store/slices/viewDepartmentsSlice';
 import AlertBox from '../../../../components/AlertBox/AlertBox';
 import { useNavigate } from 'react-router-dom';
+import PageTitle from '../../../../components/PageTitle/PageTitle';
 
 const AddRoomForm = () => {
 
@@ -21,7 +22,6 @@ const AddRoomForm = () => {
     dispatch(clearMessage())
   }, [])
 
-  //console.log(departments)
   const { values, handleChange, handleBlur, handleSubmit, touched, errors, resetForm } = useFormik({
     initialValues: {  
       department_id: '',
@@ -44,6 +44,7 @@ const AddRoomForm = () => {
   }
   return (
     <Box sx={{padding: '1rem'}}>
+     <PageTitle title='Add Room:' />
      {loading && <Typography variant='h3'>Loading...</Typography>}
      {!loading && departments && 
       <FormPaper>
