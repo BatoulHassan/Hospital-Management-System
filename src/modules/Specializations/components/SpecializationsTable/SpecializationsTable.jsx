@@ -6,7 +6,7 @@ import PageTitle from '../../../../components/PageTitle/PageTitle'
 import { StyledTableRow, ActionButton } from './style'
 import { useNavigate } from 'react-router-dom'
 import DeleteDialog from '../../../../components/DeleteDialog/DeleteDialog'
-import { deleteSpecializationItem } from '../../store/slices/DeleteSpecializationSlice'
+import { deleteSpecializationItem } from '../../store/slices/deleteSpecializationSlice'
 
 const SpecializationsTable = () => {
 
@@ -58,7 +58,7 @@ const SpecializationsTable = () => {
           <Table sx={{ minWidth: 500 }}>
             <TableHead sx={{background: '#2e7c6747'}}>
               <TableRow>
-                    <TableCell>Id</TableCell>
+                    <TableCell>ID</TableCell>
                     <TableCell>Specialization</TableCell>
                     <TableCell>Actions</TableCell>
               </TableRow>

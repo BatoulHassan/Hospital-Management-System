@@ -1,9 +1,9 @@
-import ViewDoctors from "../components/ViewDoctors/ViewDoctors"
+import DoctorsTable from "../components/DoctorsTable/DoctorsTable"
 
 const Doctors = () => {
   return (
     <>
-      <ViewDoctors />
+      <DoctorsTable />
     </>
   )
 }

@@ -17,7 +17,7 @@ export const updateSpecialization = createAsyncThunk("editSpecialization/updateS
     message: '' 
   }
 
-  const addSpecializationSlice = createSlice({
+  const editSpecializationSlice = createSlice({
     name: 'editSpecialization',
     initialState,
     reducers:{
@@ -44,5 +44,5 @@ export const updateSpecialization = createAsyncThunk("editSpecialization/updateS
     }
   })
 
-  export const {clearEdittingSpecailMsg} = addSpecializationSlice.actions
-  export default addSpecializationSlice.reducer
+  export const {clearEdittingSpecailMsg} = editSpecializationSlice.actions
+  export default editSpecializationSlice.reducer

@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom"
+import './index.css'
 import Login from './MainPages/Login/Login'
 import AdminDashboard from './MainPages/AdminDashboard/AdminDashboard'
 import DoctorDashboard from './MainPages/DoctorDashboard/DoctorDashboard'
@@ -16,10 +17,14 @@ import AddDoctor from "./modules/Doctors/pages/AddDoctor"
 import Doctors from "./modules/Doctors/pages/Doctors"
 import Account from "./modules/Account/pages/Account"
 import EditAccount from './modules/Account/pages/EditAccount'
-import Specializations from "./modules/Doctors/pages/Specializations"
+import Specializations from "./modules/Specializations/pages/Specializations"
 import RoomsOfDepartment from "./modules/Departments/pages/RoomsOfDepartment"
-import AddSpecialization from "./modules/Doctors/pages/AddSpecialization"
-import EditSpecialization from "./modules/Doctors/pages/EditSpecialization"
+import AddSpecialization from "./modules/Specializations/pages/AddSpecialization"
+import EditSpecialization from "./modules/Specializations/pages/EditSpecialization"
+import EditDoctor from './modules/Doctors/pages/EditDoctor'
+import Schedules from './modules/Schedules/pages/Schedules'
+import AddSchedules from "./modules/Schedules/pages/AddSchedules"
+import EditSchedule from "./modules/Schedules/pages/EditSchedule"
 
 function App() {
  
@@ -45,6 +50,10 @@ function App() {
            <Route path="specializations" element={<Specializations />} />
            <Route path="addSpecialization" element={<AddSpecialization />} />
            <Route path='specializations/editSpecialization/:id' element={<EditSpecialization />} />
+           <Route path='doctors/editDoctor/:id' element={<EditDoctor />} />
+           <Route path="schedules" element={<Schedules />} />
+           <Route path="addSchedules" element={<AddSchedules />} />
+           <Route path="schedules/editSchedule/:id" element={<EditSchedule />} />
         </Route>
 
         <Route path='doctor' element={<DoctorDashboard />} >

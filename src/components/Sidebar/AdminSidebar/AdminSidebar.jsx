@@ -149,6 +149,16 @@ const AdminSidebar = () => {
                                               textDecoration: 'none'})}>
                         <ListItemText sx={{pl: '30px'}} primary="Add Specialization" />
                      </NavLink>
+                     <NavLink to="schedules" style={({isActive}) => ({
+                                              color: isActive ? '#2e7c67' : '#595353',
+                                              textDecoration: 'none'})}>
+                        <ListItemText sx={{pl: '30px'}} primary="Doctor Schedules" />
+                     </NavLink>
+                     <NavLink to="addSchedules" style={({isActive}) => ({
+                                              color: isActive ? '#2e7c67' : '#595353',
+                                              textDecoration: 'none'})}>
+                        <ListItemText sx={{pl: '30px'}} primary="Add Schedules" />
+                     </NavLink>
                 </List>
             </Collapse>
            </List>
