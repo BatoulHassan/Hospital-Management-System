@@ -1,4 +1,6 @@
-import { Box, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Typography } from '@mui/material'
+import { Box, TableContainer, Paper, Table, TableHead, 
+         TableRow, TableCell, TableBody, Typography,
+         Snackbar, Alert } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSpecializations } from '../../store/slices/viewSpecializationsSlice'
@@ -6,12 +8,12 @@ import PageTitle from '../../../../components/PageTitle/PageTitle'
 import { StyledTableRow, ActionButton } from './style'
 import { useNavigate } from 'react-router-dom'
 import DeleteDialog from '../../../../components/DeleteDialog/DeleteDialog'
-import { deleteSpecializationItem } from '../../store/slices/deleteSpecializationSlice'
+import { deleteSpecializationItem, clearSpecializationMsg } from '../../store/slices/deleteSpecializationSlice'
 
 const SpecializationsTable = () => {
 
     const {loading, error, specializations} = useSelector(state => state.specializations)
-
+    const deleteState = useSelector(state => state.deleteSpecialization)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState(false)
@@ -24,6 +26,7 @@ const SpecializationsTable = () => {
 
     useEffect(() => {
         dispatch(getSpecializations())
+        dispatch(clearSpecializationMsg())
     }, [])
 
     const handleDeleteClick = (id) => {  
@@ -40,8 +43,7 @@ const SpecializationsTable = () => {
       dispatch(deleteSpecializationItem(idToDelete))
       .then(() => {  
         setOpenSnackbar(true) 
-        dispatch(getSpecializations());
-        
+        dispatch(getSpecializations())
       })
       .catch((error) => {  
         console.error("Failed to delete specialization:", error);  
@@ -88,6 +90,28 @@ const SpecializationsTable = () => {
                          handleConfirmDelete={handleConfirmDelete}
                          openSnackbar={openSnackbar}
                          handleSnackbarClose={handleSnackbarClose}/>}
+
+        {deleteState.message &&  
+                   <Snackbar
+                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                        open={openSnackbar}  
+                        onClose={handleSnackbarClose}   
+                        autoHideDuration={3000}>
+                        <Alert onClose={handleSnackbarClose} severity="success">  
+                          {deleteState.message}
+                        </Alert> 
+                    </Snackbar> }
+
+        {deleteState.error &&    
+                   <Snackbar
+                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                        open={openSnackbar}  
+                        onClose={handleSnackbarClose}   
+                        autoHideDuration={3000}>
+                        <Alert onClose={handleSnackbarClose} severity="error">  
+                          {deleteState.error}
+                        </Alert> 
+                    </Snackbar> }
     </Box>
   )
 }

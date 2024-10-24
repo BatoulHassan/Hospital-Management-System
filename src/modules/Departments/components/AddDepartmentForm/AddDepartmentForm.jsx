@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import { InputField, FormPaper, AddButton } from './style'
+import { InputField, FormPaper, AddButton, InputBox, ButtonContainer, TypographyError } from './style'
 import { useDispatch, useSelector } from 'react-redux'
 import { addNewDepartment, clearAddingMessage } from '../../store/slices/AddDepartmentSlice'
 import * as Yup from 'yup';  
@@ -30,7 +30,8 @@ const AddDepartmentForm = () => {
     }),
     onSubmit: (values) => {  
       dispatch(addNewDepartment(values)) 
-      resetForm();
+      resetForm()
+      dispatch(clearAddingMessage())
     }, 
   })
 
@@ -40,10 +41,10 @@ const AddDepartmentForm = () => {
 
   return (
   <Box sx={{padding: '1rem'}}>
-    <PageTitle title='Add Department:' />
     <FormPaper>
+      <PageTitle title='Add Department:' />
       <form onSubmit={handleSubmit}>
-          <Box sx={{mb: '1rem'}}>
+          <InputBox>
               <InputField variant='outlined' 
                      type='text' 
                      name='name' 
@@ -56,16 +57,16 @@ const AddDepartmentForm = () => {
                      {touched.name && errors.name &&
                           <Typography variant='body2' color='error'>{errors.name}</Typography>  
                      }
-            </Box>
-            <Box sx={{display: 'flex', gap: '1rem', justifyContent: {xs: 'space-between', sm: 'unset'}}}>
+            </InputBox>
+            <ButtonContainer>
               <AddButton type='submit' sx={{width: '88px'}}>
                 {loading ? "Adding..." : "Add"}
               </AddButton>
               <AddButton onClick={handleNavigate}>Back to departments</AddButton>
-            </Box>
+            </ButtonContainer>
       </form>
       {message && <AlertBox open={true} message={message} />}
-      {error && <Typography variant='body2' color='error'>{error}</Typography>}
+      {error && <TypographyError variant='body2' color='error'>{error}</TypographyError>}
     </FormPaper>
     
   </Box>

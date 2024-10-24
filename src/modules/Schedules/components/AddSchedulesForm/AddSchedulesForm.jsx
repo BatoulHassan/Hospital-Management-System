@@ -1,6 +1,6 @@
 import { Box, Typography, MenuItem } from "@mui/material"
 import PageTitle from "../../../../components/PageTitle/PageTitle"
-import { FormPaper, InputField, AddButton } from './style'
+import { FormPaper, InputField, InputBox, AddButton, ButtonContainer, TypographyError, InputTimeBox } from './style'
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import { getDoctors } from "../../../Doctors/store/slices/viewDoctorsSlice"
@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom"
 import { useFormik } from 'formik'
 import { addNewSchedule, clearAddingScheduleMsg } from '../../store/slices/addScheduleSlice'
 import AlertBox from "../../../../components/AlertBox/AlertBox"
-import * as Yup from 'yup';
+import { AddScheduleValidation } from "./AddScheduleValidation"
 
 const AddSchedulesForm = () => {
 
@@ -30,24 +30,12 @@ const AddSchedulesForm = () => {
       start_time: '',
       end_time: ''
     },
-    validationSchema: Yup.object({
-      doctor_id: Yup.string().required('Required'),
-      start_date: Yup.date().required('Required').nullable(),
-      end_date: Yup.date().required('Required')
-                   .min(Yup.ref('start_date'), 'End date must be after start date')
-                   .nullable(),
-      start_time: Yup.string().required('Required'),
-      end_time:  Yup.string()  
-      .required('End time is required')  
-      // .test('is-greater', 'End time must be after start time', function (value) {  
-      // const { start_time } = this.parent;  
-      // return new Date(`1970-01-01T${value}`) > new Date(`1970-01-01T${start_time}`);  
-      // }),  
-    }),
+    validationSchema: AddScheduleValidation,
     onSubmit: (values) => {
       //console.log(values)
       dispatch(addNewSchedule(values))
       resetForm()
+      dispatch(clearAddingScheduleMsg())
     }
   })
 
@@ -66,7 +54,7 @@ const AddSchedulesForm = () => {
       {!doctorState.loading && doctorState.doctors && 
       <FormPaper>
         <form onSubmit={handleSubmit}>
-            <Box sx={{mb: '1rem'}}>
+            <InputBox>
                 <InputField  select
                      required
                      label='Doctor'
@@ -86,9 +74,9 @@ const AddSchedulesForm = () => {
                 {touched.doctor_id && errors.doctor_id &&
                         <Typography variant='body2' color='error'>{errors.doctor_id}</Typography>  
                 }
-            </Box>
+            </InputBox>
             
-            <Box sx={{mb: '1rem', display: 'flex', flexDirection: 'column'}}>
+            <InputTimeBox>
               <label>Start Date</label>
               <InputField variant='outlined' 
                      type='date' 
@@ -100,9 +88,9 @@ const AddSchedulesForm = () => {
                      {touched.start_date && errors.start_date &&
                           <Typography variant='body2' color='error'>{errors.start_date}</Typography>  
                      }
-            </Box>
+            </InputTimeBox>
 
-            <Box sx={{mb: '1rem', display: 'flex', flexDirection: 'column'}}>
+            <InputTimeBox>
               <label>End Date</label>
               <InputField variant='outlined' 
                      type='date' 
@@ -114,9 +102,9 @@ const AddSchedulesForm = () => {
                      {touched.end_date && errors.end_date &&
                           <Typography variant='body2' color='error'>{errors.end_date}</Typography>  
                      }
-            </Box>
+            </InputTimeBox>
 
-            <Box sx={{mb: '1rem', display: 'flex', flexDirection: 'column'}}>
+            <InputTimeBox>
               <label>Start time</label>
               <InputField variant='outlined' 
                      type='time' 
@@ -128,9 +116,9 @@ const AddSchedulesForm = () => {
                      {touched.start_time && errors.start_time &&
                           <Typography variant='body2' color='error'>{errors.start_time}</Typography>  
                      }
-            </Box>
+            </InputTimeBox>
 
-            <Box sx={{mb: '1rem', display: 'flex', flexDirection: 'column'}}>
+            <InputTimeBox>
               <label>End time</label>
               <InputField variant='outlined' 
                      type='time' 
@@ -142,18 +130,18 @@ const AddSchedulesForm = () => {
                      {touched.end_time && errors.end_time &&
                           <Typography variant='body2' color='error'>{errors.end_time}</Typography>  
                      }
-            </Box>
+            </InputTimeBox>
 
-            <Box sx={{display: 'flex', gap: '1rem', justifyContent: {xs: 'space-between', sm: 'unset'}}}>
+            <ButtonContainer>
                 <AddButton type='submit'>
                    {loading ? "Adding..." : "Add"}
                 </AddButton>
 
-                <AddButton onClick={handleNavigate}>Back to Doctors</AddButton>
-            </Box>
+                <AddButton onClick={handleNavigate}>Back to Schedules</AddButton>
+            </ButtonContainer>
         </form>
         {message && <AlertBox open={true} message={message} />}
-        {error && <Typography variant='body2' color='error'>{error}</Typography>}
+        {error && <TypographyError variant='body2' color='error'>{error}</TypographyError>}
       </FormPaper>
       }
     </Box>

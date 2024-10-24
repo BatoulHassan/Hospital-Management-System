@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from '../../../../utils/axios.jsx'
 
-export const addNewDoctor = createAsyncThunk("addDoctor/addNewDoctor", async (data) => {
+export const addNewDoctor = createAsyncThunk("addDoctor/addNewDoctors", async (data) => {
     const response = await axiosInstance.post('/doctors', data)
     if (response.status === 201) {  
         return response.data; 
@@ -35,10 +35,10 @@ const initialState = {
             state.doctor = action.payload
             state.message = 'Doctor added successfully'
         })
-        builder.addCase(addNewDoctor.rejected, (state, action) => {
+        builder.addCase(addNewDoctor.rejected, (state) => {
             state.loading = false
             state.doctor = null
-            state.error = action.error.message
+            state.error = 'Failed to add doctor'
             state.message = ''
         })
     }

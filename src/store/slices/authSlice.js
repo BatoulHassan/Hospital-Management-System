@@ -1,19 +1,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from '../../utils/axios.jsx'
+import axios from 'axios'
 
-export const login = createAsyncThunk("auth/login", async (userData) => {
-    const response = await axiosInstance.post('/login', userData)
-    if (response.status === 200) {  
-        return response.data; 
-      } else {  
-        throw new Error("Failed logging in");  
-      } 
-  });
+export const login = createAsyncThunk("auth/login", async (userData, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.post('/login', userData);
+    return response.data;
+} catch (error) {
+  if (axios.isAxiosError(error) && error.response) {
+      return rejectWithValue(error.response.data.message);
+  }
+  return rejectWithValue('An unexpected error occurred');
+}
+});
 
   export const logout = createAsyncThunk("auth/logout", async () => {
     const response = await axiosInstance.post('/logout')
     if (response.status === 200) {  
-        console.log(response) 
+        //console.log(response) 
       } else {  
         throw new Error("Failed logging out");  
       } 
@@ -24,13 +28,18 @@ const initialState= {
     roles: null,  
     token: null,
     isAuthenticated: false,   
-    loading: false,  
+    loading: false, 
     error: null,  
   }
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
+    reducers:{
+      clearLoginError: (state) => {
+        state.error = ''
+      }
+    },
     extraReducers: (builder) => {
         builder.addCase(login.pending, (state) => {
             state.loading = true
@@ -44,12 +53,12 @@ const authSlice = createSlice({
             state.token = access_token
             localStorage.setItem('token', access_token)
         })
-        builder.addCase(login.rejected, (state, action) => {
+        builder.addCase(login.rejected, (state) => {
             state.loading = false
             state.isAuthenticated = false
             state.user = null
             state.token = null
-            state.error = action.error.message;
+            state.error = 'Maybe your email or password is invalid, or something is wrong Try again!'
         })
 
         builder.addCase(logout.fulfilled, (state) => {
@@ -60,4 +69,5 @@ const authSlice = createSlice({
     }
 })
 
+export const {clearLoginError} = authSlice.actions
 export default authSlice.reducer

@@ -2,16 +2,18 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getDepartments } from "../../store/slices/viewDepartmentsSlice"
 import { Box, TableContainer, Paper, Table, TableHead, 
-         TableRow, TableCell, TableBody, Typography} from "@mui/material"
+         TableRow, TableCell, TableBody, Typography,
+         Snackbar, Alert } from "@mui/material"
 import { StyledTableRow, ActionButton } from './style'
 import { useNavigate } from "react-router-dom"
 import PageTitle from "../../../../components/PageTitle/PageTitle"
 import DeleteDialog from "../../../../components/DeleteDialog/DeleteDialog"
-import { deleteDepartmentItem } from "../../store/slices/deleteDepartmentSlice"
+import { deleteDepartmentItem, clearDeleteDepartmentMsg } from "../../store/slices/deleteDepartmentSlice"
 
 const ViewDepartments = () => {
 
     const {departments, loading, error} = useSelector(state => state.viewDepartments)
+    const deleteState = useSelector(state => state.deleteDepartment)
     const [openDialog, setOpenDialog] = useState(false)
     const [idToDelete, setIdToDelete] = useState(null)
     const [openSnackbar, setOpenSnackbar] = useState(false);  
@@ -21,6 +23,7 @@ const ViewDepartments = () => {
  
     useEffect(() => {
         dispatch(getDepartments())
+        dispatch(clearDeleteDepartmentMsg())
     }, [])
 
     const handleDeleteClick = (id) => {  
@@ -34,13 +37,10 @@ const ViewDepartments = () => {
     }
 
     const handleConfirmDelete = () => {
-      // dispatch(deleteDepartment(idToDelete))
-      // setOpenSnackbar(true)
-      // handleDialogClose()
       dispatch(deleteDepartmentItem(idToDelete))
       .then(() => {  
         setOpenSnackbar(true) 
-        dispatch(getDepartments());
+        dispatch(getDepartments())
       })
       .catch((error) => {  
         console.error("Failed to delete department:", error);  
@@ -100,32 +100,25 @@ const ViewDepartments = () => {
                          openSnackbar={openSnackbar}
                          handleSnackbarClose={handleSnackbarClose}/>}
 
-        {/* <Dialog open={openDialog} onClose={handleDialogClose}>
-           <DialogTitle>Confirm Delete</DialogTitle>
-           <DialogContent>  
-             <DialogContentText>  
-               Are you sure you want to delete this department? 
-             </DialogContentText>  
-           </DialogContent>
-           <DialogActions>  
-              <Button onClick={handleDialogClose} color="primary">  
-                 Cancel  
-              </Button>  
-              <Button onClick={handleConfirmDelete} color="secondary">  
-                 Delete  
-              </Button>  
-           </DialogActions>
-      </Dialog>
+        {deleteState.message &&    <Snackbar
+                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                        open={openSnackbar}  
+                        onClose={handleSnackbarClose}   
+                        autoHideDuration={3000}>
+                        <Alert onClose={handleSnackbarClose} severity="success">  
+                          {deleteState.message}
+                        </Alert> 
+                    </Snackbar> }
 
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={openSnackbar}  
-        onClose={handleSnackbarClose}   
-        autoHideDuration={3000}>
-          <Alert onClose={handleSnackbarClose} severity="success">  
-              Department deleted successfully! 
-           </Alert> 
-      </Snackbar>   */}
+        {deleteState.error &&    <Snackbar
+                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                        open={openSnackbar}  
+                        onClose={handleSnackbarClose}   
+                        autoHideDuration={3000}>
+                        <Alert onClose={handleSnackbarClose} severity="error">  
+                          {deleteState.error}
+                        </Alert> 
+                    </Snackbar> }
     </Box>
   )
 }

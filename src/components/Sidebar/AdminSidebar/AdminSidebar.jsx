@@ -16,6 +16,9 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { logout } from "../../../store/slices/authSlice";
 import { getAccountInfo } from "../../../modules/Account/store/slices/accountSlice";
+import MedicationLiquidIcon from '@mui/icons-material/MedicationLiquid'
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
+import MoodBadIcon from '@mui/icons-material/MoodBad';
 
 const AdminSidebar = () => {
 
@@ -38,6 +41,10 @@ const AdminSidebar = () => {
     departments: false,
     rooms: false,
     doctors: false,
+    patients: false,
+    specializations: false,
+    schedules: false,
+    services: false,
   });
 
   useEffect(() => {
@@ -139,6 +146,18 @@ const AdminSidebar = () => {
                                               textDecoration: 'none'})}>
                         <ListItemText sx={{pl: '30px'}} primary="Add Doctor" />
                      </NavLink>
+                </List>
+            </Collapse>
+
+            <ListItem onClick={() => 
+                         setOpenDropdown((prevState) => ({...prevState, specializations: (!openDropdown.specializations)}))
+                       }>
+                  <MedicationLiquidIcon sx={{color: '#2e7c67'}}/>
+                  <ListItemText primary="Specializations" sx={{ml: '0.5rem',color: '#595353'}} />
+                  {openDropdown.specializations ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={openDropdown.specializations} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
                      <NavLink to="specializations" style={({isActive}) => ({
                                               color: isActive ? '#2e7c67' : '#595353',
                                               textDecoration: 'none'})}>
@@ -148,20 +167,79 @@ const AdminSidebar = () => {
                                               color: isActive ? '#2e7c67' : '#595353',
                                               textDecoration: 'none'})}>
                         <ListItemText sx={{pl: '30px'}} primary="Add Specialization" />
-                     </NavLink>
-                     <NavLink to="schedules" style={({isActive}) => ({
+                     </NavLink>  
+                </List>
+            </Collapse>
+
+            <ListItem onClick={() => 
+                         setOpenDropdown((prevState) => ({...prevState, schedules: (!openDropdown.schedules)}))
+                       }>
+                  <CalendarMonthIcon sx={{color: '#2e7c67'}}/>
+                  <ListItemText primary="Schedules" sx={{ml: '0.5rem',color: '#595353'}} />
+                  {openDropdown.schedules ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={openDropdown.schedules} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                  <NavLink to="schedules" style={({isActive}) => ({
                                               color: isActive ? '#2e7c67' : '#595353',
                                               textDecoration: 'none'})}>
-                        <ListItemText sx={{pl: '30px'}} primary="Doctor Schedules" />
-                     </NavLink>
-                     <NavLink to="addSchedules" style={({isActive}) => ({
+                        <ListItemText sx={{pl: '30px'}} primary="View Schedules" />
+                  </NavLink>
+                  <NavLink to="addSchedules" style={({isActive}) => ({
                                               color: isActive ? '#2e7c67' : '#595353',
                                               textDecoration: 'none'})}>
                         <ListItemText sx={{pl: '30px'}} primary="Add Schedules" />
+                  </NavLink>
+                </List>
+              </Collapse>
+            
+             <ListItem onClick={() => 
+                         setOpenDropdown((prevState) => ({...prevState, patients: (!openDropdown.patients)}))
+                       }>
+                  <MoodBadIcon sx={{color: '#2e7c67'}}/>
+                  <ListItemText primary="Patients" sx={{ml: '0.5rem',color: '#595353'}} />
+                  {openDropdown.patients ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={openDropdown.patients} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                     <NavLink to="patients" style={({isActive}) => ({
+                                              color: isActive ? '#2e7c67' : '#595353',
+                                              textDecoration: 'none'})}>
+                       <ListItemText sx={{pl: '30px'}} primary="View Patients" />
                      </NavLink>
+                     <NavLink to="addPatient" style={({isActive}) => ({
+                                              color: isActive ? '#2e7c67' : '#595353',
+                                              textDecoration: 'none'})}>
+                        <ListItemText sx={{pl: '30px'}} primary="Add Patient" />
+                     </NavLink>  
                 </List>
             </Collapse>
-           </List>
+
+           
+
+           <ListItem onClick={() => 
+                         setOpenDropdown((prevState) => ({...prevState, services: (!openDropdown.services)}))
+                       }>
+                  <MedicalServicesIcon sx={{color: '#2e7c67'}}/>
+                  <ListItemText primary="Services" sx={{ml: '0.5rem',color: '#595353'}} />
+                  {openDropdown.services ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={openDropdown.services} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                     <NavLink to="services" style={({isActive}) => ({
+                                              color: isActive ? '#2e7c67' : '#595353',
+                                              textDecoration: 'none'})}>
+                       <ListItemText sx={{pl: '30px'}} primary="View Services" />
+                     </NavLink>
+                     <NavLink to="addService" style={({isActive}) => ({
+                                              color: isActive ? '#2e7c67' : '#595353',
+                                              textDecoration: 'none'})}>
+                        <ListItemText sx={{pl: '30px'}} primary="Add Service" />
+                     </NavLink>  
+                </List>
+            </Collapse>
+
+          </List>
 
            <LogoutBox>
              <Button onClick={handleLogout}>

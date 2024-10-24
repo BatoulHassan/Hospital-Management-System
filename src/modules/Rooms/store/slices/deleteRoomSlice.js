@@ -13,27 +13,34 @@ export const deleteRoomItem = createAsyncThunk("deleteRoom/deleteRoomItem", asyn
 const initialState = {  
     loadingDelete: false,  
     error: null, 
-    status: '' 
+    message: '' 
   }
 
   const deleteRoomSlice = createSlice({
     name: "deleteRoom",
     initialState,
+    reducers:{
+      clearDeleteRoomMsg: (state) => {
+        state.error = ''
+        state.message = ''
+      }
+    },
     extraReducers: (builder) => {
         builder.addCase(deleteRoomItem.pending, (state) => {
             state.loading = true
           }),
           builder.addCase(deleteRoomItem.fulfilled, (state) => {
             state.loading = false,
-            state.status = 'successed'
+            state.message = 'Deleted successfully!'
             state.error = null
           }),
-          builder.addCase(deleteRoomItem.rejected, (state,action) => {
+          builder.addCase(deleteRoomItem.rejected, (state) => {
             state.loading = false,
-            state.status = 'failed'
-            state.error = action.error.message
+            state.message = ''
+            state.error = 'Failed to delete room'
           })
     }
   })
 
+  export const {clearDeleteRoomMsg} = deleteRoomSlice.actions
   export default deleteRoomSlice.reducer

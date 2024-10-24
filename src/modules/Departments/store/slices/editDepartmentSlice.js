@@ -6,7 +6,7 @@ export const updateDepartment = createAsyncThunk("editDepartment/updateDepartmen
     if (response.status === 200) {  
         return response.data; 
       } else {  
-        throw new Error("Failed adding new department");  
+        throw new Error("Failed updating  department");  
       } 
   });
 
@@ -36,10 +36,10 @@ const editDepartmentSlice = createSlice({
             state.error = null
             state.message = 'Department updated successfully!'
         })
-        builder.addCase(updateDepartment.rejected, (state, action) => {
+        builder.addCase(updateDepartment.rejected, (state) => {
             state.loading = false
             state.department = null
-            state.error = action.error.message
+            state.error = 'Failed to edit department'
             state.message = ''
         })
     }

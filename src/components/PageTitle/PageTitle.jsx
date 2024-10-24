@@ -4,7 +4,13 @@ import PropTypes from 'prop-types';
 const PageTitle = ({title}) => {
   return (
     <Box>
-        <Typography variant="h5" sx={{color: '#2e7c67', pb: '1rem'}}>{title}</Typography>
+        <Typography variant="h5" 
+                    sx={{color: '#2e7c67', 
+                         pb: '1rem',
+                         display: 'flex',
+                         justifyContent: 'center'}}>
+                      {title}
+        </Typography>
     </Box>
   )
 }

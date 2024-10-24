@@ -13,12 +13,18 @@ export const deleteDepartmentItem = createAsyncThunk("deleteDepartment/deleteDep
 const initialState = {  
     loading: false,  
     error: null,  
-    status: ""
+    message: ""
   }
 
   const deleteDepartmentSlice = createSlice({
     name: 'deleteDepartment',
     initialState,
+    reducers:{
+      clearDeleteDepartmentMsg: (state) => {
+        state.error = ''
+        state.message = ''
+      }
+    },
     extraReducers:(builder) => {
         builder.addCase(deleteDepartmentItem.pending, (state) => {
             state.loading = true
@@ -26,14 +32,15 @@ const initialState = {
         builder.addCase(deleteDepartmentItem.fulfilled, (state) => {
             state.loading = false
             state.error = null
-            state.status = "successed"
+            state.message = "Deleted successfully!"
         }),
-        builder.addCase(deleteDepartmentItem.rejected, (state,action) => {
+        builder.addCase(deleteDepartmentItem.rejected, (state) => {
             state.loading = false
-            state.error = action.error.message
-            state.status = "failed"
+            state.error = 'Failed to delete department'
+            state.message = ""
         })
     }
   })
 
+  export const {clearDeleteDepartmentMsg} = deleteDepartmentSlice.actions
   export default deleteDepartmentSlice.reducer

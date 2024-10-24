@@ -1,5 +1,5 @@
 import { Box, MenuItem, Typography } from '@mui/material'
-import { InputField, FormPaper, AddButton } from './style'
+import { InputField, FormPaper, AddButton, InputBox, ButtonContainer, TypographyError } from './style'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import * as Yup from 'yup';  
@@ -36,6 +36,7 @@ const AddRoomForm = () => {
     onSubmit: (values) => {
       dispatch(addNewRoom(values))
       resetForm()
+      dispatch(clearMessage())
     }, 
   })
 
@@ -44,12 +45,12 @@ const AddRoomForm = () => {
   }
   return (
     <Box sx={{padding: '1rem'}}>
-     <PageTitle title='Add Room:' />
      {loading && <Typography variant='h3'>Loading...</Typography>}
      {!loading && departments && 
       <FormPaper>
+         <PageTitle title='Add Room:' />
         <form onSubmit={handleSubmit}>
-          <Box sx={{mb: '1rem'}}>
+          <InputBox>
             <InputField  select
                      required
                      label='Department'
@@ -69,9 +70,9 @@ const AddRoomForm = () => {
             {touched.department_id && errors.department_id &&
                         <Typography variant='body2' color='error'>{errors.department_id}</Typography>  
             }
-          </Box>
+          </InputBox>
 
-          <Box sx={{mb: '1rem'}}>
+          <InputBox>
             <InputField variant='outlined' 
                     type='text'
                     name= 'number'
@@ -83,9 +84,9 @@ const AddRoomForm = () => {
                     {touched.number && errors.number &&
                         <Typography variant='body2' color='error'>{errors.number}</Typography>  
                      }
-          </Box>
+          </InputBox>
 
-          <Box sx={{mb: '1rem'}}>
+          <InputBox>
             <InputField select
                      required
                      label='Room Status'
@@ -101,20 +102,19 @@ const AddRoomForm = () => {
             {touched.status && errors.status &&
                   <Typography variant='body2' color='error'>{errors.status}</Typography>  
             }
-          </Box>
-          <Box sx={{display: 'flex', 
-                    gap: '0.5rem', 
-                    justifyContent: {xs: 'space-between', sm: 'unset'}}}>
+          </InputBox>
+
+          <ButtonContainer>
              <AddButton type='submit'>
               {loadingAdd ? "Adding..." : "Add"}
              </AddButton>
              <AddButton onClick={handleNavigate}>Back to rooms</AddButton>
-          </Box>
+          </ButtonContainer>
           
           
         </form>
           {message && <AlertBox open={true} message={message}/>}
-          {error && <Typography variant='body2' color='error'>{error}</Typography>}
+          {error && <TypographyError variant='body2' color='error'>{error}</TypographyError>}
       </FormPaper>
       
       }

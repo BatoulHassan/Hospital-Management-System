@@ -1,5 +1,5 @@
 import { Box, MenuItem, Typography } from "@mui/material"
-import { AddButton, FormPaper, InputField } from "./style"
+import { AddButton, FormPaper, InputField, InputBox, ButtonContainer, TypographyError } from "./style"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import { getDepartments } from "../../../Departments/store/slices/viewDepartmentsSlice"
@@ -41,6 +41,7 @@ const EditRoomForm = () => {
         }),
         onSubmit: (values) => {
           dispatch(updateRoom(values))
+          dispatch(clearEdittingMessage())
         }, 
       })
 
@@ -50,12 +51,12 @@ const EditRoomForm = () => {
 
   return (
     <Box sx={{p: '1rem'}}>
-      <PageTitle title="Edit Room:" />
       {loading && <Typography variant='h3'>Loading...</Typography>}
       {!loading && departments && 
         <FormPaper>
+          <PageTitle title="Edit Room:" />
           <form onSubmit={handleSubmit}>
-            <Box sx={{mb: '1rem'}}>
+            <InputBox>
                 <InputField  
                      select
                      required
@@ -76,9 +77,9 @@ const EditRoomForm = () => {
             {touched.department_id && errors.department_id &&
                         <Typography variant='body2' color='error'>{errors.department_id}</Typography>  
             }
-            </Box>
+            </InputBox>
 
-            <Box sx={{mb: '1rem'}}>
+            <InputBox>
                 <InputField variant='outlined' 
                     type='text'
                     name= 'number'
@@ -90,9 +91,9 @@ const EditRoomForm = () => {
                     {touched.number && errors.number &&
                         <Typography variant='body2' color='error'>{errors.number}</Typography>  
                      }
-            </Box>
+            </InputBox>
 
-            <Box sx={{mb: '1rem'}}>
+            <InputBox>
                 <InputField select
                      required
                      label='Room Status'
@@ -108,20 +109,18 @@ const EditRoomForm = () => {
                 {touched.status && errors.status &&
                   <Typography variant='body2' color='error'>{errors.status}</Typography>  
                 }
-            </Box>
+            </InputBox>
 
-            <Box sx={{display: 'flex', 
-                    gap: '0.5rem', 
-                    justifyContent: {xs: 'space-between', sm: 'unset'}}}>
+            <ButtonContainer>
              <AddButton type='submit'>
               {loadEditting ? "Editting..." : "Edit"}
              </AddButton>
              <AddButton onClick={handleNavigate}>Back to rooms</AddButton>
-          </Box>
+          </ButtonContainer>
           
           </form>
           {message && <AlertBox open={true} message={message} />}
-          {error && <Typography variant='body2' color='error'>{error}</Typography>}
+          {error && <TypographyError variant='body2' color='error'>{error}</TypographyError>}
         </FormPaper>
       }
     </Box>

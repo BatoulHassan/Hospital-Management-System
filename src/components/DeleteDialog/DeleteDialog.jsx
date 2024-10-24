@@ -1,8 +1,8 @@
 import { Box, Dialog, DialogTitle, DialogContent, 
-         DialogContentText, DialogActions, Button, Snackbar, Alert } from '@mui/material'
+         DialogContentText, DialogActions, Button } from '@mui/material'
 import PropTypes from 'prop-types'; 
 
-const DeleteDialog = ({openDialog, handleDialogClose, handleConfirmDelete, openSnackbar, handleSnackbarClose}) => {
+const DeleteDialog = ({openDialog, handleDialogClose, handleConfirmDelete}) => {
 
   return (
     <Box>
@@ -23,15 +23,15 @@ const DeleteDialog = ({openDialog, handleDialogClose, handleConfirmDelete, openS
            </DialogActions>
         </Dialog>
         
-        <Snackbar
+        {/* <Snackbar
              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
              open={openSnackbar}  
              onClose={handleSnackbarClose}   
              autoHideDuration={3000}>
              <Alert onClose={handleSnackbarClose} severity="success">  
-                  Deleted successfully! 
+                  Deleted Successfully!
              </Alert> 
-        </Snackbar> 
+        </Snackbar>  */}
         
     </Box>
   )

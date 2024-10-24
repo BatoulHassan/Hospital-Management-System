@@ -1,15 +1,15 @@
 import { Box, Typography, MenuItem } from '@mui/material'
-import { FormPaper, InputField, AddButton } from './style'
+import { FormPaper, InputField, AddButton, InputBox, ButtonContainer, TypographyError } from './style'
 import PageTitle from '../../../../components/PageTitle/PageTitle'
 import { useDispatch, useSelector } from 'react-redux'
 import AlertBox from '../../../../components/AlertBox/AlertBox'
 import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { getDepartments } from '../../../Departments/store/slices/viewDepartmentsSlice'
 import { getSpecializations } from '../../../Specializations/store/slices/viewSpecializationsSlice'
 import { useFormik } from 'formik'
-import * as Yup from 'yup';
 import {addNewDoctor, clearAddingDoctorMsg} from '../../store/slices/addDoctorSlice'
+import {AddDoctorValidation} from './AddDoctorValidation'
 
 const AddDoctorForm = () => {
 
@@ -18,6 +18,7 @@ const AddDoctorForm = () => {
   const specializationsState = useSelector(state => state.specializations)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
      dispatch(clearAddingDoctorMsg())
@@ -35,14 +36,7 @@ const AddDoctorForm = () => {
       specialization_id: '',
       avatar: null
     },
-    validationSchema: Yup.object({
-      name: Yup.string().required('Required'),
-      email: Yup.string().email('Invalid email address').required('Required'),
-      password: Yup.string().min(6, 'Must be at least 6 characters').required('Required'),
-      department_id: Yup.string().required('Required'),
-      specialization_id: Yup.string().required('Required'),
-      avatar: Yup.mixed().required('An image file is required')
-    }),
+    validationSchema: AddDoctorValidation,
     onSubmit: (values) => {  
       const formData = new FormData()
       Object.entries(values).forEach(([key,value]) => {
@@ -50,12 +44,13 @@ const AddDoctorForm = () => {
       })
       dispatch(addNewDoctor(formData))
       resetForm()
+      if (fileInputRef.current) {  
+        fileInputRef.current.value = '';  
+      }
+      dispatch(clearAddingDoctorMsg())
     },  
     
   })
-
-//   console.log(departmentsState.departments)
-//  console.log(specializationsState.specializations)
 
  const handleAvatarChange = (e) => {
   const file = e.currentTarget.files[0]
@@ -68,7 +63,6 @@ const AddDoctorForm = () => {
   
   return (
     <Box sx={{padding: '1rem'}}>
-        <PageTitle title='Add Doctor:' />
         {departmentsState.loading && specializationsState.loading && 
                <Typography variant='h3'>Loading...</Typography>
         }
@@ -78,8 +72,9 @@ const AddDoctorForm = () => {
         {!departmentsState.loading && departmentsState.departments && 
          !specializationsState.loading &&  specializationsState.specializations &&
         <FormPaper>
+            <PageTitle title='Add Doctor:' />
             <form onSubmit={handleSubmit}>
-              <Box sx={{mb: '1rem'}}>
+              <InputBox>
                 <InputField variant='outlined' 
                      type='text' 
                      name='name' 
@@ -91,9 +86,9 @@ const AddDoctorForm = () => {
                      {touched.name && errors.name &&
                           <Typography variant='body2' color='error'>{errors.name}</Typography>  
                      }
-              </Box>
+              </InputBox>
 
-              <Box sx={{mb: '1rem'}}>
+              <InputBox>
                 <InputField variant='outlined' 
                      type='email' 
                      name='email' 
@@ -105,9 +100,9 @@ const AddDoctorForm = () => {
                      {touched.email && errors.email &&
                           <Typography variant='body2' color='error'>{errors.email}</Typography>  
                      }
-              </Box>
+              </InputBox>
 
-              <Box sx={{mb: '1rem'}}>
+              <InputBox>
                 <InputField variant='outlined' 
                      type='password' 
                      name='password' 
@@ -119,9 +114,9 @@ const AddDoctorForm = () => {
                      {touched.password && errors.password &&
                           <Typography variant='body2' color='error'>{errors.password}</Typography>  
                      }
-              </Box>
+              </InputBox>
 
-              <Box sx={{mb: '1rem'}}>
+              <InputBox>
                 <InputField  select
                      required
                      label='Department'
@@ -141,9 +136,9 @@ const AddDoctorForm = () => {
                 {touched.department_id && errors.department_id &&
                         <Typography variant='body2' color='error'>{errors.department_id}</Typography>  
                 }
-              </Box>
+              </InputBox>
 
-              <Box sx={{mb: '1rem'}}>
+              <InputBox>
                 <InputField  select
                      required
                      label='Specialization'
@@ -163,10 +158,11 @@ const AddDoctorForm = () => {
                 {touched.specialization_id && errors.specialization_id &&
                         <Typography variant='body2' color='error'>{errors.specialization_id}</Typography>  
                 }
-              </Box>
+              </InputBox>
 
-              <Box sx={{mb: '1rem'}}>
-                <input name="avatar"  
+              <InputBox>
+                <input name="avatar" 
+                       ref={fileInputRef} 
                        type="file" 
                        accept="image/*"
                        onChange={handleAvatarChange} 
@@ -174,18 +170,18 @@ const AddDoctorForm = () => {
                  {touched.avatar && errors.avatar &&
                         <Typography variant='body2' color='error'>{errors.avatar}</Typography>  
                   }
-              </Box>
+              </InputBox>
 
-              <Box sx={{display: 'flex', gap: '1rem', justifyContent: {xs: 'space-between', sm: 'unset'}}}>
+              <ButtonContainer>
                  <AddButton type='submit'>
                    {loading ? "Adding..." : "Add"}
                  </AddButton>
 
                  <AddButton onClick={handleNavigate}>Back to Doctors</AddButton>
-              </Box>
+              </ButtonContainer>
             </form>
             {message && <AlertBox open={true} message={message} />}
-            {error && <Typography variant='body2' color='error'>{error}</Typography>}
+            {error && <TypographyError variant='body2' color='error'>{error}</TypographyError>}
         </FormPaper>
         }
     </Box>

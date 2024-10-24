@@ -35,10 +35,10 @@ const initialState= {
             state.department = action.payload
             state.message = 'Department added successfully'
         })
-        builder.addCase(addNewDepartment.rejected, (state, action) => {
+        builder.addCase(addNewDepartment.rejected, (state) => {
           state.loading = false
           state.department = null
-          state.error = action.error.message
+          state.error = 'Failed adding new department'
           state.message = ''
       })
     }

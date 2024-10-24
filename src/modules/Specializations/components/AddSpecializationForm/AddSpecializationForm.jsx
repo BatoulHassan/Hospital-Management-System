@@ -1,5 +1,5 @@
 import {Box, Typography} from '@mui/material'
-import { FormPaper, InputField, AddButton } from './style'
+import { FormPaper, InputField, AddButton, InputBox, ButtonContainer, TypographyError } from './style'
 import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup';  
 import { useFormik } from 'formik'
@@ -31,6 +31,7 @@ const AddSpecializationForm = () => {
           onSubmit: (values) => {
             dispatch(addNewSpecialization(values)) 
             resetForm();
+            dispatch(clearAddingSpecializeMsg())
           },
     })
 
@@ -40,10 +41,10 @@ const AddSpecializationForm = () => {
 
   return (
     <Box sx={{padding: '1rem'}}>
-        <PageTitle title='Add Specialization:' />
         <FormPaper>
             <form onSubmit={handleSubmit}>
-              <Box sx={{mb: '1rem'}}>
+              <PageTitle title='Add Specialization:' />
+              <InputBox>
                 <InputField variant='outlined' 
                      type='text' 
                      name='name' 
@@ -56,17 +57,17 @@ const AddSpecializationForm = () => {
                      {touched.name && errors.name &&
                           <Typography variant='body2' color='error'>{errors.name}</Typography>  
                      }
-              </Box>
+              </InputBox>
 
-              <Box sx={{display: 'flex', gap: '1rem', justifyContent: {xs: 'space-between', sm: 'unset'}}}>
+              <ButtonContainer>
                  <AddButton type='submit' sx={{width: '88px'}}>
                    {loading ? "Adding..." : "Add"}
                  </AddButton>
                  <AddButton onClick={handleNavigate}>Back to Specializations</AddButton>
-              </Box>
+              </ButtonContainer>
             </form>
             {message && <AlertBox open={true} message={message} />}
-            {error && <Typography variant='body2' color='error'>{error}</Typography>}
+            {error && <TypographyError variant='body2' color='error'>{error}</TypographyError>}
         </FormPaper>
     </Box>
   )

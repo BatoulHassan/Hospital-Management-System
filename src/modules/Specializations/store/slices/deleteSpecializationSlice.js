@@ -19,7 +19,12 @@ const initialState= {
   const deleteSpecializationSlice = createSlice({
     name: 'deleteSpecialization',
     initialState,
-    reducers:{},
+    reducers:{
+      clearSpecializationMsg: (state) => {
+        state.error = ''
+        state.message = ''
+      }
+    },
     extraReducers:(builder) => {
         builder.addCase(deleteSpecializationItem.pending, (state) => {
             state.loading = true
@@ -29,12 +34,13 @@ const initialState= {
             state.message = "Specialization deleted successfully!"
             state.error = null
         })
-        builder.addCase(deleteSpecializationItem.rejected, (state,action) => {
+        builder.addCase(deleteSpecializationItem.rejected, (state) => {
             state.loading = false
             state.message = ""
-            state.error = action.error.message
+            state.error = 'Failed to delete'
         })
     }
   })
 
-  export default deleteSpecializationSlice
+  export const {clearSpecializationMsg} = deleteSpecializationSlice.actions
+  export default deleteSpecializationSlice.reducer

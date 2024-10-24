@@ -36,10 +36,10 @@ const initialState = {
             state.schedule = action.payload
             state.message = 'Schedule updated successfully!'
         })
-        builder.addCase(updateSchedule.rejected, (state, action) => {
+        builder.addCase(updateSchedule.rejected, (state) => {
             state.loading = false
             state.schedule = null
-            state.error = action.error.message;
+            state.error = 'Failed to edit schedule';
             state.message = ''
          })
     }

@@ -4,7 +4,7 @@ import { FormPaper, InputField } from './LoginStyle'
 import { useFormik } from "formik"
 import * as Yup from 'yup'
 import { useDispatch, useSelector } from 'react-redux'
-import { login } from '../../store/slices/authSlice'
+import { clearLoginError, login } from '../../store/slices/authSlice'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 
@@ -25,7 +25,8 @@ const Login = () => {
       password: Yup.string().min(6, 'Must be at least 6 characters').required('Required'), 
     }),
     onSubmit: (values) => {  
-      dispatch(login(values)) 
+      dispatch(login(values))
+      dispatch(clearLoginError())
       resetForm()
       }, 
 })
@@ -75,7 +76,7 @@ const directToPages = () => {
                        } 
 
             <InputField variant='outlined' 
-                       type='passowrd' 
+                       type='password' 
                        name='password' 
                        label='Password'
                        value={values.password}
@@ -98,7 +99,7 @@ const directToPages = () => {
         </form>
         {!isAuthenticated && error && 
               <Typography color="error.main">
-                Your email or password is invalid
+                {error}
               </Typography>}
       </FormPaper>
     </Box>

@@ -35,10 +35,10 @@ export const updateRoom = createAsyncThunk("editRoom/updateRoom", async (data) =
             state.room = action.payload
             state.message = 'Room updated successfully!'
         })
-        builder.addCase(updateRoom.rejected, (state, action) => {
+        builder.addCase(updateRoom.rejected, (state) => {
             state.loadEditting = false
             state.room = null
-            state.error = action.error.message;
+            state.error = 'Failed to edit room'
             state.message = ''
         })
     }

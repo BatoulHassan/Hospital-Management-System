@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material"
-import { FormPaper, InputField, AddButton } from './style'
+import { FormPaper, InputField, AddButton, InputBox, ButtonContainer, TypographyError } from './style'
 import { useNavigate, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import * as Yup from 'yup';  
@@ -34,7 +34,8 @@ const EditSpecializationForm = () => {
         .min(2, 'Must be at least 2 characters long'),  
     }),
     onSubmit: (values) => {
-      dispatch(updateSpecialization(values)) 
+      dispatch(updateSpecialization(values))
+      dispatch(clearEdittingSpecailMsg())
     },
   })
 
@@ -44,10 +45,10 @@ const EditSpecializationForm = () => {
 
   return (
     <Box sx={{padding: '1rem'}}>
-      <PageTitle title="Edit Specialization:" />
       <FormPaper>
         <form onSubmit={handleSubmit}>
-              <Box sx={{mb: '1rem'}}>
+              <PageTitle title="Edit Specialization:" />   
+              <InputBox>
                 <InputField variant='outlined' 
                      type='text' 
                      name='name' 
@@ -60,17 +61,17 @@ const EditSpecializationForm = () => {
                      {touched.name && errors.name &&
                           <Typography variant='body2' color='error'>{errors.name}</Typography>  
                      }
-              </Box>
+              </InputBox>
 
-              <Box sx={{display: 'flex', gap: '1rem', justifyContent: {xs: 'space-between', sm: 'unset'}}}>
+              <ButtonContainer>
                 <AddButton type='submit' sx={{width: '88px'}}>
                   {loading ? "Editting..." : "Edit"}
                 </AddButton>
                 <AddButton onClick={handleNavigate}>Back to Specializations</AddButton>
-            </Box>
+            </ButtonContainer>
         </form>
             {message && <AlertBox open={true} message={message} />}
-            {error && <Typography variant='body2' color='error'>{error}</Typography>}
+            {error && <TypographyError variant='body2' color='error'>{error}</TypographyError>}
       </FormPaper>
     </Box>
   )

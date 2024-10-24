@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { Box, Typography } from '@mui/material'
-import { InputField, FormPaper, AddButton } from './style'
+import { InputField, FormPaper, AddButton, InputBox, ButtonContainer, TypographyError } from './style'
 import { useSelector, useDispatch } from "react-redux"
 import { useFormik } from "formik"
 import * as Yup from 'yup';  
@@ -35,6 +35,7 @@ const EditDepartmentForm = () => {
       }),
       onSubmit: (values) => {
         dispatch(updateDepartment(values))
+        dispatch(clearEditDepartmentMessage())
       }
     })
 
@@ -44,10 +45,10 @@ const EditDepartmentForm = () => {
 
   return (
     <Box sx={{padding: '1rem'}}>
-      <PageTitle title="Edit Department:" />
       <FormPaper>
+        <PageTitle title="Edit Department:" />
         <form onSubmit={handleSubmit}>
-          <Box sx={{mb: '1rem'}}>
+          <InputBox>
              <InputField variant='outlined' 
                      type='text' 
                      name='name' 
@@ -56,21 +57,21 @@ const EditDepartmentForm = () => {
                      onBlur={handleBlur}
                      label='Name'
                      size='small'
-                     sx={{width: '50%'}}  />
+                     sx={{width: {xs: '100%', sm: '50%'} }}  />
                       {touched.name && errors.name &&
                           <Typography variant='body2' color='error'>{errors.name}</Typography>  
                      }
-          </Box>
-          <Box sx={{display: 'flex', gap: '1rem'}}>
+          </InputBox>
+          <ButtonContainer>
             <AddButton type='submit' sx={{width: '88px'}}>
               {loading ? "Editting..." : "Edit"}
             </AddButton>
             <AddButton onClick={handleNavigate}>Back to departments</AddButton>
-          </Box>
+          </ButtonContainer>
          
         </form>
         {message && <AlertBox open={true} message={message} />}
-        {error && <Typography variant='body2' color='error'>{error}</Typography>}
+        {error && <TypographyError variant='body2' color='error'>{error}</TypographyError>}
      </FormPaper>
   </Box>
   )

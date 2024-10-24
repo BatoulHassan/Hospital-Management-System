@@ -35,10 +35,10 @@ const addRoomSlice = createSlice({
             state.room = action.payload
             state.message = 'Room added successfully!'
         })
-        builder.addCase(addNewRoom.rejected, (state, action) => {
+        builder.addCase(addNewRoom.rejected, (state) => {
             state.loadingAdd = false
             state.room = null
-            state.error = action.error.message;
+            state.error = 'Failed to add room'
             state.message = ''
         })
     }

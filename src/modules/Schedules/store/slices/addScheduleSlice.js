@@ -36,10 +36,10 @@ const initialState = {
             state.schedule = action.payload
             state.message = 'Schedule added successfully'
         })
-        builder.addCase(addNewSchedule.rejected, (state, action) => {
+        builder.addCase(addNewSchedule.rejected, (state) => {
             state.loading = false
             state.schedule = null
-            state.error = action.error.message
+            state.error = 'Failed to add schedule'
             state.message = ''
         })
     }

@@ -2,14 +2,14 @@ import {Box, Typography, MenuItem, Avatar} from '@mui/material'
 import PageTitle from '../../../../components/PageTitle/PageTitle'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
-import { FormPaper, InputField, AddButton } from './style'
+import { FormPaper, InputField, AddButton, FileInputBox, InputBox, ButtonContainer, TypographyError } from './style'
 import { getDepartments } from '../../../Departments/store/slices/viewDepartmentsSlice'
 import { getSpecializations } from '../../../Specializations/store/slices/viewSpecializationsSlice'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useFormik } from 'formik'
-import * as Yup from 'yup';
+import {EditDoctorValidation} from './EditDoctorValidation'
 import AlertBox from '../../../../components/AlertBox/AlertBox'
-import { updateDoctor } from '../../store/slices/editDoctorSlice'
+import { updateDoctor, clearEdittingDoctorMsg } from '../../store/slices/editDoctorSlice'
 
 const EditDoctorForm = () => {
 
@@ -27,6 +27,7 @@ const EditDoctorForm = () => {
   useEffect(() => {
     dispatch(getDepartments())
     dispatch(getSpecializations())
+    dispatch(clearEdittingDoctorMsg())
  }, [])
 
  const { values, handleChange, handleBlur, handleSubmit, touched, errors, setFieldValue} = useFormik({
@@ -37,25 +38,17 @@ const EditDoctorForm = () => {
     // password: '',
     department_id: doctor.department_id,
     specialization_id: doctor.specialization_id,
-    avatar: `https://pk.jamous-tech.com/storage/${doctor.user.avatar}`
+    avatar: doctor.user.avatar
   },
-  validationSchema: Yup.object({
-    name: Yup.string().required('Required'),
-    email: Yup.string().email('Invalid email address').required('Required'),
-    // password: Yup.string().min(6, 'Must be at least 6 characters').required('Required'),
-    department_id: Yup.string().required('Required'),
-    specialization_id: Yup.string().required('Required'),
-    avatar: Yup.mixed().required('An image file is required')
-  }),
+  validationSchema: EditDoctorValidation,
   onSubmit: (values) => {  
-    //console.log(values)
-    const formData = new FormData()
-    Object.entries(values).forEach(([key,value]) => {
-        formData.append(key, value)
-        console.log(key, value); 
-    })
-    //console.log("formData is: ", formData)
-    dispatch(updateDoctor(values.id,formData))
+    // const formData = new FormData()
+    // Object.entries(values).forEach(([key,value]) => {
+    //     formData.append(key, value)
+    //     console.log(key, value); 
+    // })
+    dispatch(updateDoctor(values))
+    dispatch(clearEdittingDoctorMsg())
   },
  })
 
@@ -70,7 +63,6 @@ const EditDoctorForm = () => {
 
   return (
     <Box sx={{padding: '1rem'}}>
-      <PageTitle title='Edit Doctor:' />
       {departmentsState.loading && specializationsState.loading && 
                <Typography variant='h3'>Loading...</Typography>
       }
@@ -80,8 +72,9 @@ const EditDoctorForm = () => {
       {!departmentsState.loading && departmentsState.departments && 
          !specializationsState.loading &&  specializationsState.specializations &&
          <FormPaper>
+           <PageTitle title='Edit Doctor:' />
            <form onSubmit={handleSubmit}>
-              <Box sx={{mb: '1rem'}}>
+              <InputBox>
                 <InputField variant='outlined' 
                      type='text' 
                      name='name' 
@@ -93,9 +86,9 @@ const EditDoctorForm = () => {
                      {touched.name && errors.name &&
                           <Typography variant='body2' color='error'>{errors.name}</Typography>  
                      }
-              </Box>
+              </InputBox>
 
-              <Box sx={{mb: '1rem'}}>
+              <InputBox>
                 <InputField variant='outlined' 
                      type='email' 
                      name='email' 
@@ -107,9 +100,9 @@ const EditDoctorForm = () => {
                      {touched.email && errors.email &&
                           <Typography variant='body2' color='error'>{errors.email}</Typography>  
                      }
-              </Box>
+              </InputBox>
 
-              <Box sx={{mb: '1rem'}}>
+              <InputBox>
                 <InputField  select
                      required
                      label='Department'
@@ -129,9 +122,9 @@ const EditDoctorForm = () => {
                 {touched.department_id && errors.department_id &&
                         <Typography variant='body2' color='error'>{errors.department_id}</Typography>  
                 }
-              </Box>
+              </InputBox>
 
-              <Box sx={{mb: '1rem'}}>
+              <InputBox>
                 <InputField  select
                      required
                      label='Specialization'
@@ -151,37 +144,30 @@ const EditDoctorForm = () => {
                 {touched.specialization_id && errors.specialization_id &&
                         <Typography variant='body2' color='error'>{errors.specialization_id}</Typography>  
                 }
-              </Box>
+              </InputBox>
 
-              <Box sx={{mb: '1rem'}}>
-                <Box sx={{width: {xs: '100%', sm: 'calc(50%)'}, 
-                          boxSizing: 'border-box',
-                          display: 'flex',alignItems: 'center',
-                          justifyContent: 'space-between',
-                          height: '56px',
-                          padding: '8px 14px',
-                          borderRadius: '4px',
-                          border: '1px solid #c4c4c4'}}>
+              <InputBox>
+                <FileInputBox>
                   <input name="avatar" type="file" id="uploadImg" className='inputFile' onChange={handleAvatarChange} onBlur={handleBlur}/>
                   <label htmlFor="uploadImg" className='fileLabel'>Edit image File</label>
-                  <Avatar alt={values.name} src={values.avatar} />
-                </Box>
+                  <Avatar alt={values.name} src={`https://pk.jamous-tech.com/storage/${values.avatar}`} />
+                </FileInputBox>
                  {touched.avatar && errors.avatar &&
                         <Typography variant='body2' color='error'>{errors.avatar}</Typography>  
                   }
-              </Box>
+              </InputBox>
 
-              <Box sx={{display: 'flex', gap: '1rem', justifyContent: {xs: 'space-between', sm: 'unset'}}}>
+              <ButtonContainer>
                  <AddButton type='submit'>
                    {loading ? "Editting..." : "Edit"}
                  </AddButton>
 
                  <AddButton onClick={handleNavigate}>Back to Doctors</AddButton>
-              </Box>
+              </ButtonContainer>
 
            </form>
            {message && <AlertBox open={true} message={message} />}
-           {error && <Typography variant='body2' color='error'>{error}</Typography>}
+           {error && <TypographyError variant='body2' color='error'>{error}</TypographyError>}
          </FormPaper>
       }
     </Box>

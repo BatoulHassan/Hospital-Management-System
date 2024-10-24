@@ -35,10 +35,10 @@ export const updateSpecialization = createAsyncThunk("editSpecialization/updateS
               state.specialization = action.payload
               state.message = 'specialization updated successfully!'
         })
-        builder.addCase(updateSpecialization.rejected, (state, action) => {
+        builder.addCase(updateSpecialization.rejected, (state) => {
               state.loading = false
               state.specialization = null
-              state.error = action.error.message;
+              state.error = 'Failed to add specialization!'
               state.message = ''
           })
     }

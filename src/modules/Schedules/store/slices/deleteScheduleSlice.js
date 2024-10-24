@@ -19,6 +19,12 @@ const initialState= {
   const deleteScheduleSlice = createSlice({
     name: 'deleteSchedule',
     initialState,
+    reducers:{
+      clearScheduleMsg: (state) => {
+        state.error = ''
+        state.message = ''
+      }
+    },
     extraReducers: (builder) => {
         builder.addCase(deleteScheduleItem.pending, (state) => {
             state.loading = true
@@ -28,12 +34,13 @@ const initialState= {
             state.message = "Schedule deleted successfully!"
             state.error = null
         })
-        builder.addCase(deleteScheduleItem.rejected, (state,action) => {
+        builder.addCase(deleteScheduleItem.rejected, (state) => {
             state.loading = false
             state.message = ""
-            state.error = action.error.message
+            state.error = 'Failed to delete'
         })
     }
   })
 
+  export const {clearScheduleMsg} = deleteScheduleSlice.actions
   export default deleteScheduleSlice.reducer

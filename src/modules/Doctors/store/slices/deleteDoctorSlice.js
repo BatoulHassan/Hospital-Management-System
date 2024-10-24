@@ -19,6 +19,12 @@ const initialState= {
   const deleteDoctorSlice = createSlice({
     name: 'deleteDoctor',
     initialState,
+    reducers:{
+      clearDeleteDoctorMsg: (state) => {
+        state.error = ''
+        state.message = ''
+      }
+    },
     extraReducers:(builder) => {
         builder.addCase(deleteDoctorItem.pending, (state) => {
             state.loading = true
@@ -28,12 +34,13 @@ const initialState= {
             state.message = "Doctor deleted successfully!"
             state.error = null
         })
-        builder.addCase(deleteDoctorItem.rejected, (state,action) => {
+        builder.addCase(deleteDoctorItem.rejected, (state) => {
             state.loading = false
             state.message = ""
-            state.error = action.error.message
+            state.error = 'Failed to delete Docotr'
         })
     }
   })
 
+  export const {clearDeleteDoctorMsg} = deleteDoctorSlice.actions
   export default deleteDoctorSlice.reducer

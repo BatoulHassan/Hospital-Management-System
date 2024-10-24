@@ -13,7 +13,7 @@ import { Provider } from "react-redux"
 import store from "./store"
 import AddRooms from "./modules/Rooms/pages/AddRooms"
 import EditRoom from './modules/Rooms/pages/EditRoom'
-import AddDoctor from "./modules/Doctors/pages/AddDoctor"
+import AddDoctor from "./modules/Doctors/pages/AddDoctor"  
 import Doctors from "./modules/Doctors/pages/Doctors"
 import Account from "./modules/Account/pages/Account"
 import EditAccount from './modules/Account/pages/EditAccount'
@@ -25,6 +25,12 @@ import EditDoctor from './modules/Doctors/pages/EditDoctor'
 import Schedules from './modules/Schedules/pages/Schedules'
 import AddSchedules from "./modules/Schedules/pages/AddSchedules"
 import EditSchedule from "./modules/Schedules/pages/EditSchedule"
+import Patients from "./modules/Patients/pages/Patients"
+import AddPatient from "./modules/Patients/pages/AddPatient"
+import EditPatient from "./modules/Patients/pages/EditPatient"
+import Services from "./modules/Services/pages/Services"
+import AddService from "./modules/Services/pages/AddService"
+import EditService from "./modules/Services/pages/EditService"
 
 function App() {
  
@@ -54,8 +60,14 @@ function App() {
            <Route path="schedules" element={<Schedules />} />
            <Route path="addSchedules" element={<AddSchedules />} />
            <Route path="schedules/editSchedule/:id" element={<EditSchedule />} />
+           <Route path='patients' element={<Patients />} />
+           <Route path='addPatient' element={<AddPatient />} />
+           <Route path="patients/editPatient/:id" element={<EditPatient />} />
+           <Route path='services' element={<Services />} />
+           <Route path='addService' element={<AddService />} />
+           <Route path="services/editService/:id" element={<EditService />} />
         </Route>
-
+   
         <Route path='doctor' element={<DoctorDashboard />} >
            <Route index element={<Navigate to="dashboard" />} />
            <Route path='dashboard' element={<Dashboard />} />

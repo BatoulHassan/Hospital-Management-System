@@ -35,10 +35,10 @@ const initialState= {
             state.specialization = action.payload
             state.message = 'specialization added successfully'
         })
-        builder.addCase(addNewSpecialization.rejected, (state, action) => {
+        builder.addCase(addNewSpecialization.rejected, (state) => {
             state.loading = false
             state.specialization = null
-            state.error = action.error.message
+            state.error = 'Failed to add specialization'
             state.message = ''
         })
     }
