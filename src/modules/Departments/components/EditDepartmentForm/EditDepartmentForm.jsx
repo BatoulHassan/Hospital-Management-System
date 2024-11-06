@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { Box, Typography } from '@mui/material'
-import { InputField, FormPaper, AddButton, InputBox, ButtonContainer, TypographyError } from './style'
+import { InputField, FormPaper, AddButton, InputBox, 
+         ButtonContainer, TypographyError } from '../../../../Styles/Styles'
 import { useSelector, useDispatch } from "react-redux"
 import { useFormik } from "formik"
 import * as Yup from 'yup';  

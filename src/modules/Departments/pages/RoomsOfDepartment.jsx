@@ -1,9 +1,9 @@
-import ViewRooms from "../components/ViewRooms/ViewRooms"
+import ViewRoomsOfDeprtment from "../components/ViewRoomsOfDeprtment/ViewRoomsOfDeprtment"
 
 const RoomsOfDepartment = () => {
   return (
     <div>
-        <ViewRooms />
+        <ViewRoomsOfDeprtment />
     </div>
   )
 }

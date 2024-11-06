@@ -1,7 +1,7 @@
 import { Box, Typography, TableContainer, Paper, 
          Table, TableHead, TableRow, TableCell, TableBody,
          Snackbar, Alert } from "@mui/material"
-import { StyledTableRow, ActionButton } from './style'
+import { StyledTableRow, ActionButton } from '../../../../Styles/Styles'
 import PageTitle from "../../../../components/PageTitle/PageTitle"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useState } from "react"
@@ -51,14 +51,12 @@ const ServicesTable = () => {
       })
     }
 
-  console.log(services)
-
   return (
     <Box sx={{p: '1rem'}}>
       <PageTitle title='Services:' />
       {loading && <Typography variant='h3'>Loading...</Typography>}
       {!loading && error && <Typography variant='h3'>{error}</Typography>}
-      {!loading && services && 
+      {!loading && services.length ? 
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 1120 }}>
             <TableHead sx={{background: '#2e7c6747'}}>
@@ -95,6 +93,11 @@ const ServicesTable = () => {
             </TableBody>
           </Table>
         </TableContainer>
+         : 
+         !loading && !error && !services.length ? <Typography variant='h3'>
+                                                    No services added
+                                                  </Typography>
+                                                : null
       }
 
       {idToDelete && <DeleteDialog 

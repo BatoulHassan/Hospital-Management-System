@@ -6,14 +6,16 @@ import { useFormik } from "formik"
 import * as Yup from 'yup'
 import UpdatePassword from "../UpdatePassword/UpdatePassword"
 import { useNavigate } from "react-router-dom"
+import PageTitle from '../../../../components/PageTitle/PageTitle'
 
 const EditAccountForm = () => {
 
    const {accountInfo, successMessage, errorMessage, loadingEditting} = useSelector(state => state.account)
+   const {roles} = useSelector(state => state.auth)
    const navigate = useNavigate()
    const dispatch = useDispatch()
    
-   const {values, handleChange, handleSubmit, handleBlur, touched, errors, resetForm } = useFormik({
+   const {values, handleChange, handleSubmit, handleBlur, touched, errors } = useFormik({
         initialValues: { 
             name: accountInfo.name,
             email: accountInfo.email,  
@@ -26,18 +28,24 @@ const EditAccountForm = () => {
          }),
           onSubmit: (values) => {  
             dispatch(editAccountInfo(values)) 
-            resetForm()
             },
     })
 
     const handleNavigate = () => {
       dispatch(clearMessages())
-      navigate('/admin/account')
+      if(roles === 'admin'){
+         navigate('/admin/account')
+      }else if(roles === 'doctor'){
+         navigate('/doctor/account')
+      }else if(roles === 'Patient'){
+         navigate('/patient/account')
+      }
     }
 
   return (
     <Box sx={{display: 'flex', justifyContent: 'center', pt: '1rem'}}>
         <Paper sx={{p: '1rem', width: {xs: '100%', sm: '60%'} }}>
+            <PageTitle title='Edit your account' />
             <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column'}}>
                <InputField variant='outlined' 
                        type='text' 

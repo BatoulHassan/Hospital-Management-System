@@ -1,5 +1,6 @@
 import {Box, Typography} from '@mui/material'
-import { FormPaper, InputField, AddButton, InputBox, ButtonContainer, TypographyError } from './style'
+import { FormPaper, InputField, AddButton, InputBox, 
+         ButtonContainer, TypographyError } from '../../../../Styles/Styles'
 import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup';  
 import { useFormik } from 'formik'

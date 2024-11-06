@@ -1,15 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from '../../../../utils/axios.jsx'
 
-// export const getRooms = createAsyncThunk("viewRoom/getRooms", async () => {
-//     const response = await axiosInstance.get('/rooms')
-//     if (response.status === 200) { 
-//         return response.data; 
-//       } else {  
-//         throw new Error("Failed getting account information");  
-//       } 
-//   });
-
   export const getRooms = createAsyncThunk(  
     'viewRoom/getRooms',  
     async (_, { rejectWithValue }) => {  

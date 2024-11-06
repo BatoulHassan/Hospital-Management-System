@@ -27,6 +27,6 @@ const AlertBox = ({open, message}) => {
 AlertBox.propTypes = {  
   open: PropTypes.bool.isRequired ,  
   message: PropTypes.string.isRequired,
-};
+}
 
 export default memo(AlertBox)

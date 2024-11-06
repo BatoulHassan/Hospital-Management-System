@@ -1,20 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from '../../../../utils/axios.jsx'
 
-export const updatePatient = createAsyncThunk("editPatient/updatePatient", async (data) => {
-  console.log(data)
-    const formData = new FormData()
-    formData.append('id', data.id)
-    formData.append('name', data.name)
-    formData.append('email', data.email)
-    formData.append('national_id', data.national_id)
-    formData.append('mobile_number', data.mobile_number)
-    formData.append('residence_address', data.residence_address)
-    formData.append('avatar', data.avatar)
-    
-    formData.append('_method', 'PUT')
-    
-    const response = await axiosInstance.post(`/patients/${data.id}`, formData)
+export const updatePatient = createAsyncThunk("editPatient/updatePatient", async (values) => {
+  const formData = new FormData()
+      formData.append('id', values.id)
+      formData.append('name', values.name)
+      formData.append('email', values.email)
+      formData.append('national_id', values.national_id)
+      formData.append('mobile_number', values.mobile_number)
+      formData.append('residence_address', values.residence_address)
+      if(values.avatar){
+        formData.append('avatar', values.avatar)
+      }
+
+    const response = await axiosInstance.post(`/patients/${values.id}`, formData)
     if (response.status === 200) {  
         return response.data; 
       } else {  

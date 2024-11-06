@@ -8,7 +8,7 @@ export const getSpecializations = createAsyncThunk("specializations/getSpecializ
       } else {  
         throw new Error("Failed getting specializations");  
       } 
-  });
+  })
 
 const initialState= {  
     specializations: null, 

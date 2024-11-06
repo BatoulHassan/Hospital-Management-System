@@ -1,16 +1,17 @@
 import { Box, Typography, TableContainer, Paper,
          Table, TableHead, TableRow, TableCell,
          TableBody, Avatar, Snackbar, Alert } from "@mui/material"
-import { StyledTableRow, ActionButton } from "./style"
+import { StyledTableRow, ActionButton } from "../../../../Styles/Styles"
 import PageTitle from "../../../../components/PageTitle/PageTitle"
 import { useSelector, useDispatch } from "react-redux"
-import { useEffect, useState } from 'react'
+import { useEffect, useState, memo } from 'react'
 import { getDoctors } from '../../store/slices/viewDoctorsSlice'
 import { useNavigate } from 'react-router-dom'
 import { deleteDoctorItem, clearDeleteDoctorMsg } from "../../store/slices/deleteDoctorSlice"
 import DeleteDialog from "../../../../components/DeleteDialog/DeleteDialog"
+import PropTypes from 'prop-types'; 
 
-const DoctorsTable = () => {
+const DoctorsTable = ({showActions}) => {
 
    const {loading, error, doctors} = useSelector(state => state.viewDoctors)
    const deleteState = useSelector(state => state.deleteDoctor)
@@ -50,14 +51,12 @@ const DoctorsTable = () => {
     dispatch(clearDeleteDoctorMsg())
   }, [])
 
-  console.log(doctors)
-
   return (
     <Box sx={{p: '1rem'}}>
       <PageTitle title='Doctors:' />
       {loading && <Typography variant='h3'>Loading...</Typography>}
       {!loading && error && <Typography variant='h3'>{error}</Typography>}
-      {!loading && doctors && 
+      {!loading && doctors ? 
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 1120 }}>
             <TableHead sx={{background: '#2e7c6747'}}>
@@ -86,16 +85,32 @@ const DoctorsTable = () => {
                 <TableCell>{doctor.specialization.name}</TableCell>
                 <TableCell>
                    <ActionButton sx={{mr: '0.5rem'}}
-                                 onClick={() => navigate(`editDoctor/${doctor.id}`)}>
-                                  Edit
+                                 onClick={() => navigate(`viewSchedules/${doctor.id}`)}>
+                                  Schedules
                    </ActionButton>
-                   <ActionButton onClick={() => handleDeleteClick(doctor.id)}>Delete</ActionButton>
+                   {
+                    showActions && <>
+                                     <ActionButton sx={{mr: '0.5rem'}}
+                                                   onClick={() => navigate(`editDoctor/${doctor.id}`)}>
+                                        Edit
+                                     </ActionButton>
+                                     <ActionButton onClick={() => handleDeleteClick(doctor.id)}>
+                                      Delete
+                                     </ActionButton>
+                                   </>
+                   }
+                   
                 </TableCell>
               </StyledTableRow>
             ))}
             </TableBody>
           </Table>
         </TableContainer>
+        : 
+              !loading && !error && !doctors.length ? <Typography variant='h3'>
+                                                         No doctors added
+                                                      </Typography>
+                                                    : null
       }
 
       {idToDelete && <DeleteDialog 
@@ -130,4 +145,8 @@ const DoctorsTable = () => {
   )
 }
 
-export default DoctorsTable
+DoctorsTable.propTypes = {  
+  showActions: PropTypes.bool,
+};
+
+export default memo(DoctorsTable)

@@ -1,5 +1,6 @@
 import { Box, Typography, MenuItem } from '@mui/material'
-import { FormPaper, InputField, AddButton, InputBox, ButtonContainer, TypographyError } from './style'
+import { FormPaper, InputField, AddButton, InputBox, 
+         ButtonContainer, TypographyError } from '../../../../Styles/Styles'
 import PageTitle from '../../../../components/PageTitle/PageTitle'
 import { useDispatch, useSelector } from 'react-redux'
 import AlertBox from '../../../../components/AlertBox/AlertBox'

@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from '../../../../utils/axios.jsx'
 
 export const addNewService = createAsyncThunk("addService/addNewService", async (data) => {
-    // console.log(data)
        const response = await axiosInstance.post('/services', data)
        if (response.status === 201) {  
            return response.data; 

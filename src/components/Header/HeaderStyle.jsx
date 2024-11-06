@@ -29,6 +29,6 @@ export const HeaderBox = styled(Box)(() => ({
      borderRadius: '3px',
      width: 'unset',
     [theme.breakpoints.down('sm')]: {
-        width: '150px'
+        display: 'none'
     }
-  }));
+  }))

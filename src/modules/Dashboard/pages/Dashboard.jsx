@@ -1,7 +1,10 @@
+import DashboardCards from '../components/DashboardCards/DashboardCards'
 
 const Dashboard = () => {
   return (
-    <div>Dashboard</div>
+    <>
+      <DashboardCards />
+    </>
   )
 }
 

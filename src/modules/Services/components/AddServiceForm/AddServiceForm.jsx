@@ -5,7 +5,8 @@ import { useFormik } from "formik"
 import { AddServiceValidation } from "./AddServiceValidation"
 import { Box, Typography, MenuItem } from "@mui/material"
 import PageTitle from "../../../../components/PageTitle/PageTitle"
-import { InputField, FormPaper, AddButton, InputBox, ButtonContainer, TypographyError } from './style'
+import { InputField, FormPaper, AddButton, InputBox, 
+         ButtonContainer, TypographyError } from '../../../../Styles/Styles'
 import { useNavigate } from "react-router-dom"
 import AlertBox from "../../../../components/AlertBox/AlertBox"
 import { addNewService, clearAddingServiceMsg } from "../../store/slices/addServiceSlice"
@@ -32,7 +33,6 @@ const AddServiceForm = () => {
     },
     validationSchema: AddServiceValidation,
     onSubmit: (values) => {
-      console.log(values)
       dispatch(addNewService(values))
       dispatch(clearAddingServiceMsg())
       resetForm()

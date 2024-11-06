@@ -1,5 +1,6 @@
 import { Box, MenuItem, Typography } from '@mui/material'
-import { InputField, FormPaper, AddButton, InputBox, ButtonContainer, TypographyError } from './style'
+import { InputField, FormPaper, AddButton, InputBox, 
+         ButtonContainer, TypographyError } from '../../../../Styles/Styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import * as Yup from 'yup';  
@@ -14,6 +15,9 @@ const AddRoomForm = () => {
 
   const {departments, loading} = useSelector(state => state.viewDepartments)
   const {message, error, loadingAdd} = useSelector(state => state.addRoom)
+  const {rooms} = useSelector(state => state.viewRooms)
+  const existingRoomNumbers = rooms.map(item => item.number)
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -30,8 +34,11 @@ const AddRoomForm = () => {
     },
     validationSchema: Yup.object({  
       department_id: Yup.string().required('Department is required'),
-      number: Yup.number().required('Room number is required'),
-      status: Yup.string().required('Room status is required'),
+      number: Yup.string().required('Room number is required')
+                          .test('is-unique', 'Room number must be unique', value => {  
+                          return !existingRoomNumbers.includes(value)
+      }),
+      status: Yup.string().required('Room status is required')
     }),
     onSubmit: (values) => {
       dispatch(addNewRoom(values))
@@ -60,7 +67,7 @@ const AddRoomForm = () => {
                      onBlur={handleBlur}      
                      sx={{width: {xs: '100%', sm: '50%'}, display: 'flex'}}>
                     {
-                      departments?.map(department => (
+                      departments.map(department => (
                         <MenuItem key={department.id} value={department.id}>
                           {department.name}
                         </MenuItem>

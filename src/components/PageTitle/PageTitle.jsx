@@ -7,6 +7,7 @@ const PageTitle = ({title}) => {
         <Typography variant="h5" 
                     sx={{color: '#2e7c67', 
                          pb: '1rem',
+                         fontSize:{xs: "18px", sm: '1.5rem'},
                          display: 'flex',
                          justifyContent: 'center'}}>
                       {title}

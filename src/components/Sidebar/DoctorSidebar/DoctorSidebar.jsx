@@ -1,6 +1,5 @@
-import { Typography, List, ListItem, ListItemText, Button,Collapse } from "@mui/material"
-//import profileImg from '../../assets/profileImg.jpg'
-import { NavLink } from "react-router-dom";
+import { Typography, List, ListItem, ListItemText, Button } from "@mui/material"
+import { NavLink, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useDispatch, useSelector } from "react-redux";
 import { setIsCollapsed } from "../../../store/slices/sidebarSlice";
@@ -10,24 +9,41 @@ import DomainIcon from '@mui/icons-material/Domain';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import { SidebarBox, LogoBox, LogoTypography, ArrowIconButton, 
          ProfileBox, LogoutBox, LogoutTypography } from "../SidebarStyle";
-import { useState } from "react";
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
+import { useEffect } from "react"
+import { logout } from "../../../store/slices/authSlice";
+import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety'
+import ListItemWithViewRout from '../ListItemWithViewRout/ListItemWithViewRout'
+import MoodBadIcon from '@mui/icons-material/MoodBad'
+import SidebarListItem from "../../SidebarListItem/SidebarListItem";
 
 const DoctorSidebar = () => {
 
   const {isCollapsed} = useSelector(state => state.sidebar)
+  const {accountInfo} = useSelector(state => state.account)
+  const {isAuthenticated, loadingLogout} = useSelector(state => state.auth)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  
 
   const closeSidebar = () => {
     dispatch(setIsCollapsed(false))
  }
 
- const [open, setOpen] = useState(true);
+  const handleLogout = () => {
+    dispatch(logout())
+  }
 
-  const handleClick = () => {
-    setOpen(!open);
-  };
+  useEffect(() => {
+    if(!isAuthenticated){
+      navigate('/login')
+    }
+  }, [isAuthenticated])
+
+  const listData = [
+    {icon: DomainIcon, mainTitle: 'Departments', viewPath: 'departments', viewLabel: 'View Departments'},
+    {icon: MeetingRoomIcon, mainTitle: 'Rooms', viewPath: 'rooms', viewLabel: 'View Rooms'},
+    {icon: MoodBadIcon, mainTitle: 'Patients', viewPath: 'patients', viewLabel: 'View Patients'},
+  ]
 
 
   return (
@@ -42,8 +58,7 @@ const DoctorSidebar = () => {
               </ArrowIconButton>
            </LogoBox>
            <ProfileBox>
-               {/* <img src={profileImg} alt='profileImg' style={{width: '40px', height: '40px', borderRadius: '50%'}}/> */}
-               <Typography variant="h6" sx={{color: '#595353'}}>John Doe</Typography>
+               <Typography variant="h6" sx={{color: '#595353'}}>{accountInfo?.name}</Typography>
            </ProfileBox>
            <List>
 
@@ -56,42 +71,32 @@ const DoctorSidebar = () => {
               </ListItem>
             </NavLink>
 
-            <ListItem onClick={handleClick}>
-                  <DomainIcon sx={{color: '#2e7c67'}}/>
-                  <ListItemText primary="Departments" sx={{ml: '0.5rem',color: '#595353'}} />
-                  {open ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                     <NavLink to="departments" style={({isActive}) => ({
-                                              color: isActive ? '#2e7c67' : '#595353',
-                                              textDecoration: 'none'})}>
-                       <ListItemText sx={{pl: '30px'}} primary="View Departments" />
-                     </NavLink>
-                     <NavLink to="addDepartment" style={({isActive}) => ({
-                                              color: isActive ? '#2e7c67' : '#595353',
-                                              textDecoration: 'none'})}>
-                        <ListItemText sx={{pl: '30px'}} primary="Add Department" />
-                     </NavLink>  
-                </List>
-            </Collapse>
+            {
+              listData?.map((item,index) => (
+                <ListItemWithViewRout
+                             key={index}
+                             Icon={item.icon}
+                             mainTitle={item.mainTitle} 
+                             viewPath={item.viewPath} 
+                             viewLabel={item.viewLabel} />
+              ))
+            }
 
-            <NavLink to="rooms" style={({isActive}) => ({
-                                          color: isActive ? '#2e7c67' : '#595353',
-                                          textDecoration: 'none'})}>
-                     <ListItem>
-                        <MeetingRoomIcon sx={{color: '#2e7c67'}}/>
-                        <ListItemText primary="Rooms" sx={{ml: '0.5rem'}} />
-                     </ListItem>
-            </NavLink>
-             
-     
+              <SidebarListItem
+                             Icon={HealthAndSafetyIcon}
+                             mainTitle='Conditions' 
+                             viewPath='medicalConditions'
+                             viewLabel='View' 
+                             addPath='addMedical'
+                             addLabel='Add' />
            </List>
 
            <LogoutBox>
-             <Button>
+             <Button sx={{textTransform: 'capitalize'}} onClick={handleLogout}>
               <LogoutIcon sx={{color: '#2e7c67'}}/>
-              <LogoutTypography variant="body2">Logout</LogoutTypography>
+              <LogoutTypography variant="body2">
+                {loadingLogout ? "Loggin out..." : "Logout"}
+              </LogoutTypography>
              </Button>
            </LogoutBox>
            

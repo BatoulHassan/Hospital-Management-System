@@ -4,13 +4,14 @@ import { Box, TableContainer, Paper, Table, TableHead,
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getRooms } from "../../store/slices/viewRoomsSlice"
-import { ActionButton, StyledTableRow } from "./style"
+import { ActionButton, StyledTableRow } from "../../../../Styles/Styles"
 import { useNavigate } from "react-router-dom"
 import PageTitle from "../../../../components/PageTitle/PageTitle"
 import DeleteDialog from "../../../../components/DeleteDialog/DeleteDialog"
 import { deleteRoomItem, clearDeleteRoomMsg } from "../../store/slices/deleteRoomSlice"
+import PropTypes from 'prop-types'
 
-const ViewRooms = () => {
+const ViewRooms = ({showActions, showNote}) => {
     const {rooms, loading, error} = useSelector(state => state.viewRooms)
     const deleteState = useSelector(state => state.deleteRoom)
     const [openDialog, setOpenDialog] = useState(false)
@@ -55,7 +56,8 @@ const ViewRooms = () => {
       <PageTitle title="Rooms:" />
       {loading && <Typography variant='h3'>Loading...</Typography>}
       {!loading && error && <Typography variant='h5'>{error}</Typography>}
-      {!loading && rooms &&
+      {
+      !loading && rooms?.length ?
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 700 }}>
             <TableHead sx={{background: '#2e7c6747'}}>
@@ -64,7 +66,10 @@ const ViewRooms = () => {
                     <TableCell>Room Number</TableCell>
                     <TableCell>Department</TableCell>
                     <TableCell>Status</TableCell>
-                    <TableCell>Actions</TableCell>
+                    {
+                      showActions &&
+                         <TableCell>Actions</TableCell>
+                    }
               </TableRow>
             </TableHead>
             <TableBody>
@@ -76,10 +81,19 @@ const ViewRooms = () => {
                     <TableCell>{room.department.name}</TableCell>
                     <TableCell>{room.status}</TableCell>
                     <TableCell>
-                      <ActionButton sx={{mr: '0.5rem'}} onClick={() => {navigate(`editRoom/${room.id}`)}}>Edit</ActionButton>
-                      <ActionButton onClick={() => handleDeleteClick(room.id)}>
-                        Delete
-                      </ActionButton>
+                    {
+                        showActions &&
+                        <>
+                         <ActionButton sx={{mr: '0.5rem'}} 
+                                    onClick={() => {navigate(`editRoom/${room.id}`)}}>
+                                      Edit
+                         </ActionButton>
+                     
+                         <ActionButton onClick={() => handleDeleteClick(room.id)}>
+                            Delete
+                         </ActionButton>
+                        </>
+                      }
                     </TableCell>
                   </StyledTableRow>
                 ))
@@ -87,6 +101,11 @@ const ViewRooms = () => {
             </TableBody>
           </Table>
         </TableContainer>
+        : 
+             !loading && !error && !rooms?.length ? <Typography variant='h3'>
+                                                      No rooms added
+                                                    </Typography>
+                                                 : null
       }
 
      {idToDelete && <DeleteDialog 
@@ -106,7 +125,8 @@ const ViewRooms = () => {
                         </Alert> 
                     </Snackbar> }
 
-    {deleteState.error &&    <Snackbar
+    {deleteState.error &&    
+                    <Snackbar
                         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                         open={openSnackbar}  
                         onClose={handleSnackbarClose}   
@@ -116,8 +136,19 @@ const ViewRooms = () => {
                         </Alert> 
                     </Snackbar> }
 
+      {
+       showNote && <Typography sx={{color: '#6d6666', mt:'0.5rem'}} variant="body2">
+                       You can change the status of any room from the departments section
+                      </Typography>
+      }
+
     </Box>
   )
 }
+
+ViewRooms.propTypes = {  
+  showActions: PropTypes.bool,
+  showNote: PropTypes.bool,
+};
 
 export default ViewRooms

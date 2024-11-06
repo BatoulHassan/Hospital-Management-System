@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, memo } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getDepartments } from "../../store/slices/viewDepartmentsSlice"
 import { Box, TableContainer, Paper, Table, TableHead, 
          TableRow, TableCell, TableBody, Typography,
          Snackbar, Alert } from "@mui/material"
-import { StyledTableRow, ActionButton } from './style'
+import { StyledTableRow, ActionButton } from '../../../../Styles/Styles'
 import { useNavigate } from "react-router-dom"
 import PageTitle from "../../../../components/PageTitle/PageTitle"
 import DeleteDialog from "../../../../components/DeleteDialog/DeleteDialog"
 import { deleteDepartmentItem, clearDeleteDepartmentMsg } from "../../store/slices/deleteDepartmentSlice"
+import PropTypes from 'prop-types'; 
 
-const ViewDepartments = () => {
+const ViewDepartments = ({showActions}) => {
 
     const {departments, loading, error} = useSelector(state => state.viewDepartments)
     const deleteState = useSelector(state => state.deleteDepartment)
@@ -56,9 +57,9 @@ const ViewDepartments = () => {
         <PageTitle title='Departments:' />
         {loading && <Typography variant="h2">Loading...</Typography>}
         {!loading &&  error && <h5>{error}</h5>}
-        {!loading && departments && 
+        {!loading && departments.length ?  
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 600 }}>
+          <Table sx={{ minWidth: 700 }}>
             <TableHead sx={{background: '#2e7c6747'}}>
               <TableRow>
                     <TableCell>ID</TableCell>
@@ -75,22 +76,40 @@ const ViewDepartments = () => {
                   <TableCell>{department.id}</TableCell>
                   <TableCell>{department.name}</TableCell>
                   <TableCell>{department.rooms.length}</TableCell>
-                  <TableCell>
-                    <ActionButton sx={{mr: '0.5rem'}}
-                                  onClick={() => {navigate(`viewRooms/${department.id}`)}}>
-                                    Rooms
-                    </ActionButton>
-                    <ActionButton sx={{mr: '0.5rem'}} 
-                                  onClick={() => {navigate(`editDepartment/${department.id}`)}}>
+                  <TableCell sx={{display: 'flex', flexDirection: 'column', gap: '0.5rem'}}>
+                    {showActions &&
+                    <Box>
+                      <ActionButton sx={{mr: '0.5rem',width: '115px'}} 
+                                    onClick={() => {navigate(`editDepartment/${department.id}`)}}>
                                      Edit
-                    </ActionButton>
-                    <ActionButton onClick={() => handleDeleteClick(department.id)}>Delete</ActionButton>
+                      </ActionButton>
+                      <ActionButton sx={{width: '115px'}}
+                                    onClick={() => handleDeleteClick(department.id)}>
+                                      Delete
+                      </ActionButton>
+                    </Box>
+                    }
+                    <Box>
+                      <ActionButton sx={{mr: '0.5rem',width: '115px'}}
+                                    onClick={() => {navigate(`viewRooms/${department.id}`)}}>
+                                    All Rooms
+                      </ActionButton>
+                      <ActionButton sx={{width: '115px'}}
+                                    onClick={() => {navigate(`availableRooms/${department.id}`)}}>
+                                    Available Rooms
+                      </ActionButton>
+                    </Box>
                   </TableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
+        : 
+            !loading && !error && !departments.length ? <Typography variant='h3'>
+                                                         No departments added
+                                                        </Typography>
+                                                      : null
         }
 
         {idToDelete && <DeleteDialog 
@@ -123,4 +142,8 @@ const ViewDepartments = () => {
   )
 }
 
-export default ViewDepartments
+ViewDepartments.propTypes = {  
+  showActions: PropTypes.bool,
+};
+
+export default memo(ViewDepartments)

@@ -1,6 +1,8 @@
 import { Box, Typography, MenuItem } from "@mui/material"
 import PageTitle from "../../../../components/PageTitle/PageTitle"
-import { FormPaper, InputField, InputBox, AddButton, ButtonContainer, TypographyError, InputTimeBox } from './style'
+import { FormPaper, InputField, InputBox, AddButton, 
+         ButtonContainer, TypographyError } from '../../../../Styles/Styles'
+import { InputTimeBox } from './style'
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import { getDoctors } from "../../../Doctors/store/slices/viewDoctorsSlice"
@@ -14,6 +16,7 @@ const AddSchedulesForm = () => {
 
   const doctorState = useSelector(state => state.viewDoctors)
   const { loading, message, error } = useSelector(state => state.addSchedule)
+  const {schedules} = useSelector(state => state.schedules)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -32,7 +35,6 @@ const AddSchedulesForm = () => {
     },
     validationSchema: AddScheduleValidation,
     onSubmit: (values) => {
-      //console.log(values)
       dispatch(addNewSchedule(values))
       resetForm()
       dispatch(clearAddingScheduleMsg())
@@ -43,16 +45,14 @@ const AddSchedulesForm = () => {
     navigate('/admin/schedules')
   }
 
-  console.log(doctorState.doctors)
-
   return (
     <Box sx={{padding: '1rem'}}>
-      <PageTitle title='Add Schedule:' />
       {doctorState.loading && <Typography variant='h3'>Loading...</Typography>}
       {!doctorState.loading && doctorState.error && 
            <Typography variant='h3'>{doctorState.error}</Typography>}
       {!doctorState.loading && doctorState.doctors && 
       <FormPaper>
+        <PageTitle title='Add Schedule:' />
         <form onSubmit={handleSubmit}>
             <InputBox>
                 <InputField  select
@@ -71,6 +71,13 @@ const AddSchedulesForm = () => {
                       ))
                     }
                 </InputField>
+                {
+                 schedules?.find(item => item.doctor_id === values.doctor_id) && 
+                        <Typography color='error'>
+                                           This doctor has already schedules,
+                                           you can edit or delete it!
+                        </Typography>
+                }
                 {touched.doctor_id && errors.doctor_id &&
                         <Typography variant='body2' color='error'>{errors.doctor_id}</Typography>  
                 }
@@ -137,7 +144,7 @@ const AddSchedulesForm = () => {
                    {loading ? "Adding..." : "Add"}
                 </AddButton>
 
-                <AddButton onClick={handleNavigate}>Back to Schedules</AddButton>
+                <AddButton onClick={handleNavigate}>Back to schedules</AddButton>
             </ButtonContainer>
         </form>
         {message && <AlertBox open={true} message={message} />}

@@ -8,7 +8,7 @@ export const getDoctors = createAsyncThunk("viewDoctors/getDoctors", async () =>
       } else {  
         throw new Error("Failed getting doctors");  
       } 
-  });
+  })
 
 const initialState= {  
     doctors: [], 
@@ -32,7 +32,7 @@ const initialState= {
             state.loading = false
             state.doctors = []
             state.error = action.error.message
-          })
+        })
     }
   })
 

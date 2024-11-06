@@ -1,9 +1,11 @@
-import { Box, Typography, MenuItem } from "@mui/material"
+import { Box, Typography } from "@mui/material"
 import { useNavigate, useParams } from "react-router-dom"
 import PageTitle from "../../../../components/PageTitle/PageTitle"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
-import { FormPaper, InputField, AddButton, InputBox, ButtonContainer, TypographyError, InputTimeBox } from "./style"
+import { FormPaper, InputField, AddButton, ButtonContainer, 
+         TypographyError } from "../../../../Styles/Styles"
+import { InputTimeBox } from './style'
 import { useFormik } from 'formik'
 import AlertBox from "../../../../components/AlertBox/AlertBox"
 import { getDoctors } from "../../../Doctors/store/slices/viewDoctorsSlice"
@@ -14,7 +16,6 @@ const EditScheduleForm = () => {
 
   const {id} = useParams()
   const {loading, message, error} = useSelector(state => state.editSchedule)
-  const doctorState = useSelector(state => state.viewDoctors)
   const {schedules} = useSelector(state => state.schedules)
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -49,35 +50,9 @@ const handleNavigate = () => {
 
   return (
     <Box sx={{padding: '1rem'}}>
-      {doctorState.loading && <Typography variant='h3'>Loading...</Typography>}
-      {!doctorState.loading && doctorState.error && 
-           <Typography variant='h3'>{doctorState.error}</Typography>}
-      {!doctorState.loading && doctorState.doctors && 
       <FormPaper>
         <PageTitle title='Edit Schedule:' />
         <form onSubmit={handleSubmit}>
-            <InputBox>
-                <InputField  select
-                     required
-                     label='Doctor'
-                     name='doctor_id'
-                     value={values.doctor_id}
-                     onChange={handleChange}
-                     onBlur={handleBlur}      
-                     sx={{width: {xs: '100%', sm: '50%'}, display: 'flex'}}>
-                     {
-                      doctorState.doctors?.map(doctor => (
-                        <MenuItem key={doctor.id} value={doctor.id}>
-                          {doctor.user.name}
-                        </MenuItem>
-                      ))
-                    }
-                </InputField>
-                {touched.doctor_id && errors.doctor_id &&
-                        <Typography variant='body2' color='error'>{errors.doctor_id}</Typography>  
-                }
-            </InputBox>
-
             <InputTimeBox>
               <label>Start Date</label>
               <InputField variant='outlined' 
@@ -139,13 +114,12 @@ const handleNavigate = () => {
                    {loading ? "Editting..." : "Edit"}
                 </AddButton>
 
-                <AddButton onClick={handleNavigate}>Back to Schedule</AddButton>
+                <AddButton onClick={handleNavigate}>Back to Schedules</AddButton>
             </ButtonContainer>
         </form>
         {message && <AlertBox open={true} message={message} />}
         {error && <TypographyError variant='body2' color='error'>{error}</TypographyError>}
       </FormPaper>
-      }
     </Box>
   )
 }

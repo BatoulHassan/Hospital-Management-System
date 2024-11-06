@@ -24,7 +24,6 @@ const UpdatePassword = () => {
       password_confirmation: Yup.string().required('Required'), 
    }),
    onSubmit: (values) => {  
-    console.log(values)
     dispatch(editPasswordInfo(values))
     resetForm()
     },

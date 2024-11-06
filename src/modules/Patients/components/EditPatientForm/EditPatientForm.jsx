@@ -2,9 +2,11 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
-import { Box, Typography, Avatar } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import PageTitle from "../../../../components/PageTitle/PageTitle";
-import { FormPaper, InputField, AddButton, FileInputBox, InputBox, ButtonContainer, TypographyError } from "./style"
+import {FileInputBox} from './style'
+import { FormPaper, InputField, AddButton, InputBox, 
+         ButtonContainer, TypographyError } from "../../../../Styles/Styles"
 import AlertBox from "../../../../components/AlertBox/AlertBox";
 import { updatePatient, clearEdittingPatientMsg } from "../../store/slices/editPatientSlice";
 import { useEffect } from "react";
@@ -33,7 +35,7 @@ const EditPatientForm = () => {
       national_id: patient.national_id,
       mobile_number: patient.mobile_number,
       residence_address: patient.residence_address,
-      avatar: patient.user.avatar
+      avatar: null
     },
     validationSchema: Yup.object({
       name: Yup.string().required('Required'),
@@ -50,14 +52,9 @@ const EditPatientForm = () => {
                         .max(15, 'Mobile number must be at most 15 digits')
                         .required('Required'),
       residence_address: Yup.string().required('Required'),
-      avatar: Yup.mixed().required('An image file is required')
     }),
     onSubmit: (values) => {
-      //console.log(values)
-      // const formData = new FormData()
-      // Object.entries(values).forEach(([key,value]) => {
-      //    formData.append(key, value)
-      // })
+      console.log(values)
       dispatch(updatePatient(values))
       dispatch(clearEdittingPatientMsg())
     }
@@ -148,15 +145,12 @@ const handleNavigate = () => {
               </InputBox>
 
               <InputBox>
+                <label>Edit image File</label>
                 <FileInputBox>
                     <input name="avatar" 
                          type="file" 
-                         id="uploadImg" 
-                         className='inputFile' 
                          onChange={handleAvatarChange} 
                          onBlur={handleBlur}/>
-                    <label htmlFor="uploadImg" className='fileLabel'>Edit image File</label>
-                    <Avatar alt={values.name} src={`https://pk.jamous-tech.com/storage/${values.avatar}`} />
                 </FileInputBox>
                  {touched.avatar && errors.avatar &&
                         <Typography variant='body2' color='error'>{errors.avatar}</Typography>  

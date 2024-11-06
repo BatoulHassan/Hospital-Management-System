@@ -1,20 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from '../../../../utils/axios.jsx'
 
-export const updateDoctor = createAsyncThunk("editDoctor/updateDoctor", async (data) => {
-    console.log(data)
-    const formData = new FormData()
-    formData.append('id', data.id)
-    formData.append('name', data.name)
-    formData.append('email', data.email)
-    formData.append('department_id', data.department_id)
-    formData.append('specialization_id', data.specialization_id)
-    formData.append('avatar', data.avatar)
-    formData.append('_method', 'PUT')
-    console.log("formData is: ", formData)
+export const updateDoctor = createAsyncThunk("editDoctor/updateDoctor", async (values) => {
+  console.log(values)
+  const formData = new FormData()
+  formData.append('id', values.id)
+  formData.append('name', values.name)
+  formData.append('email', values.email)
+  formData.append('department_id', values.department_id)
+  formData.append('specialization_id', values.specialization_id)
+  if (values.avatar){
+    formData.append('avatar', values.avatar)
+  }
     
-    const response = await axiosInstance.post(`/doctors/${data.id}`, formData)
+    const response = await axiosInstance.post(`/doctors/${values.id}`, formData)
     if (response.status === 200) {  
+      console.log('response is: ',response)
         return response.data; 
       } else {  
         throw new Error("Failed updating doctor");  
@@ -42,6 +43,7 @@ const initialState = {
             state.loading = true
         }),
         builder.addCase(updateDoctor.fulfilled, (state, action) => {
+            console.log(action.payload)
             state.loading = false
             state.doctor = action.payload
             state.message = 'Doctor updated successfully!'

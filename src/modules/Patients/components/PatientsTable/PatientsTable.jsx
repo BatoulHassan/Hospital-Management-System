@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react"
+import { memo, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getPatients } from "../../store/slices/patientsSlice"
 import { Box, Typography, TableContainer, Paper,Table,
      TableHead, TableRow, TableCell, TableBody, Avatar,
      Snackbar, Alert } from "@mui/material"
 import PageTitle from "../../../../components/PageTitle/PageTitle"
-import { StyledTableRow, ActionButton } from "./style"
+import { StyledTableRow, ActionButton } from "../../../../Styles/Styles"
 import { useNavigate } from "react-router-dom"
 import { deletePatientItem, clearPatientMsg } from '../../store/slices/deletePatientSlice'
 import DeleteDialog from "../../../../components/DeleteDialog/DeleteDialog"
+import PropTypes from 'prop-types'; 
 
-const PatientsTable = () => {
+const PatientsTable = ({showActions}) => {
 
     const {patients, loading, error} = useSelector(state => state.patients)
     const deleteState = useSelector(state => state.deletePatient)
@@ -56,7 +57,7 @@ const PatientsTable = () => {
         <PageTitle title='Patients:' />
         {loading && <Typography variant='h3'>Loading...</Typography>}
         {!loading && error && <Typography variant='h3'>{error}</Typography>}
-        {!loading && patients && 
+        {!loading && patients.length ? 
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 1120 }}>
               <TableHead sx={{background: '#2e7c6747'}}>
@@ -68,7 +69,10 @@ const PatientsTable = () => {
                   <TableCell>National ID</TableCell>
                   <TableCell>Mobile</TableCell>
                   <TableCell>Address</TableCell>
-                  <TableCell>Actions</TableCell>
+                  {
+                    showActions && 
+                     <TableCell>Actions</TableCell>
+                  }
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -85,18 +89,28 @@ const PatientsTable = () => {
                         <TableCell>{patient.national_id}</TableCell>
                         <TableCell>{patient.mobile_number}</TableCell>
                         <TableCell>{patient.residence_address}</TableCell>
-                        <TableCell>
-                        <ActionButton sx={{mr: '0.5rem'}}
+                        {
+                          showActions && 
+                          <TableCell>
+                              <ActionButton sx={{mr: '0.5rem'}}
                                  onClick={() => navigate(`editPatient/${patient.id}`)}>
                                   Edit
-                        </ActionButton>
-                        <ActionButton onClick={() => handleDeleteClick(patient.id)}>Delete</ActionButton>
-                </TableCell>
+                              </ActionButton>
+                              <ActionButton onClick={() => handleDeleteClick(patient.id)}>
+                                  Delete
+                              </ActionButton>
+                          </TableCell>
+                        }
                     </StyledTableRow>
                 ))}
               </TableBody>
             </Table>
         </TableContainer>
+        : 
+           !loading && !error && !patients.length ? <Typography variant='h3'>
+                                                      No patients added
+                                                    </Typography>
+                                                  : null
         }
 
        {idToDelete && <DeleteDialog 
@@ -131,4 +145,8 @@ const PatientsTable = () => {
   )
 }
 
-export default PatientsTable
+PatientsTable.propTypes = {  
+  showActions: PropTypes.bool.isRequired ,  
+}
+
+export default memo(PatientsTable)

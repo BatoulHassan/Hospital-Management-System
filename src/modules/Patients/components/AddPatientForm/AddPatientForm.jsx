@@ -2,7 +2,8 @@ import { Box, Typography } from "@mui/material"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import PageTitle from "../../../../components/PageTitle/PageTitle"
-import { FormPaper, InputField, AddButton, InputBox, ButtonContainer, TypographyError } from "./style"
+import { FormPaper, InputField, AddButton, InputBox,
+         ButtonContainer, TypographyError } from "../../../../Styles/Styles"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import AlertBox from "../../../../components/AlertBox/AlertBox"

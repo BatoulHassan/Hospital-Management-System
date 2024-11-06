@@ -1,5 +1,6 @@
 import { Box, MenuItem, Typography } from "@mui/material"
-import { AddButton, FormPaper, InputField, InputBox, ButtonContainer, TypographyError } from "./style"
+import { AddButton, FormPaper, InputField, InputBox, 
+         ButtonContainer, TypographyError } from "../../../../Styles/Styles"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import { getDepartments } from "../../../Departments/store/slices/viewDepartmentsSlice"
@@ -12,15 +13,18 @@ import PageTitle from "../../../../components/PageTitle/PageTitle"
 
 const EditRoomForm = () => {
 
+    const {id} = useParams()
     const {departments, loading} = useSelector(state => state.viewDepartments)
     const {rooms} = useSelector(state => state.viewRooms)
     const {message, loadEditting, error} = useSelector(state => state.editRoom)
+    
+    const room = rooms?.find(item => item.id === Number(id))
+    const filteredRooms = rooms.filter(item => item.id !== Number(id))
+    const existingRoomNumbers = filteredRooms.map(item => item.number)
+
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const {id} = useParams()
-    
-    const room = rooms?.find(item => item.id === Number(id))
 
     useEffect(() => {
         dispatch(getDepartments())
@@ -36,7 +40,10 @@ const EditRoomForm = () => {
         },
         validationSchema: Yup.object({  
           department_id: Yup.string().required('Department is required'),
-          number: Yup.number().required('Room number is required'),
+          number:  Yup.string().required('Room number is required')
+          .test('is-unique', 'Room number must be unique', value => {  
+          return !existingRoomNumbers.includes(value)
+}),
           status: Yup.string().required('Room status is required'),
         }),
         onSubmit: (values) => {

@@ -6,5 +6,5 @@ export const EditDoctorValidation = Yup.object({
     // password: Yup.string().min(6, 'Must be at least 6 characters').required('Required'),
     department_id: Yup.string().required('Required'),
     specialization_id: Yup.string().required('Required'),
-    avatar: Yup.mixed().required('An image file is required')
+    //avatar: Yup.mixed(),
 })

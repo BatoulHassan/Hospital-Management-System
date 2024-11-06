@@ -31,6 +31,15 @@ import servicesSlice from '../modules/Services/store/slices/servicesSlice'
 import addServiceSlice from '../modules/Services/store/slices/addServiceSlice'
 import editServiceSlice from '../modules/Services/store/slices/editServiceSlice'
 import deleteServiceSlice from '../modules/Services/store/slices/deleteServiceSlice'
+import medicalConditionsSlice from '../modules/MedicalConditions/store/slices/medicalConditionsSlice'
+import addMedicalSlice from '../modules/MedicalConditions/store/slices/addMedicalSlice'
+import editMedicalSlice from '../modules/MedicalConditions/store/slices/editMedicalSlice'
+import deleteMedicalSlice from '../modules/MedicalConditions/store/slices/deleteMedicalSlice'
+import visitsSlice from '../modules/Visits/store/slice/visitsSlice'
+import addVisitSlice from '../modules/Visits/store/slice/addVisitSlice'
+import editVisitSlice from '../modules/Visits/store/slice/editVisitSlice'
+import deleteVisitSlice from '../modules/Visits/store/slice/deleteVisitSlice'
+import patientConditionsSlice from '../modules/MedicalConditions/store/slices/patientConditionsSlice'
 
 const reducers = {
     reducer: {
@@ -66,6 +75,15 @@ const reducers = {
       addService: addServiceSlice,
       editService: editServiceSlice,
       deleteService: deleteServiceSlice,
+      medicalConditions: medicalConditionsSlice,
+      addMedical: addMedicalSlice,
+      editMedical: editMedicalSlice,
+      deleteMedical: deleteMedicalSlice,
+      visits: visitsSlice,
+      addVisit: addVisitSlice,
+      editVisit: editVisitSlice,
+      deleteVisit: deleteVisitSlice,
+      patientConditions: patientConditionsSlice,
     },
   };
 

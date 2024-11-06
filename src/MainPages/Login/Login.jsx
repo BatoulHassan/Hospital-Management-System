@@ -45,7 +45,7 @@ const directToPages = () => {
     case 'doctor':  
       navigate('/doctor') 
       break;  
-    case 'patient':  
+    case 'Patient':  
       navigate('/patient') 
       break;  
     default:  
@@ -93,8 +93,9 @@ const directToPages = () => {
                     sx={{width: '100%', 
                          background: '#2e7c67', 
                          color: 'white',
+                         textTransform: 'capitalize',
                          mt: '1rem'}}>
-                          {loading ? 'Logging in...' : 'Login'}
+                      {loading ? 'Logging in...' : 'Login'}
             </Button>
         </form>
         {!isAuthenticated && error && 

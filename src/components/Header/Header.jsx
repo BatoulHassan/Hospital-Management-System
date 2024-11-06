@@ -21,7 +21,7 @@ const Header = () => {
    useEffect(() => {
     dispatch(getAccountInfo())
    }, [])
-   
+
    const openSidebar = () => {
       dispatch(setIsCollapsed(true))
    }
@@ -35,7 +35,14 @@ const Header = () => {
     }
 
     const routToAccount = () => {
-      navigate('/admin/account')
+      if(roles === 'admin'){
+        navigate('/admin/account')
+      }else if(roles === 'doctor'){
+        navigate('/doctor/account')
+      }else if(roles === 'Patient'){
+        navigate('/patient/account')
+      }
+      
       handleClose()
     }
 
@@ -57,8 +64,6 @@ const Header = () => {
         <IconButton onClick={handleMenu}>
            <PersonIcon/>
         </IconButton>
-         {
-          roles === 'admin' &&
          
           <Menu
                 id="menu-appbar"
@@ -79,7 +84,7 @@ const Header = () => {
                 <MenuItem onClick={handleClose}>Settings</MenuItem>
                 <MenuItem onClick={routToAccount}>My account</MenuItem>
           </Menu>
-        }
+    
        </Box>
     </HeaderBox>
   )

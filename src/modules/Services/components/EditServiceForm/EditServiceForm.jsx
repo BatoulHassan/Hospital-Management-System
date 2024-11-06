@@ -7,7 +7,8 @@ import { Box, Typography, MenuItem } from "@mui/material"
 import { useFormik } from "formik"
 import {EditServiceValidation} from './EditServiceValidation'
 import PageTitle from "../../../../components/PageTitle/PageTitle"
-import { InputField, FormPaper, AddButton, InputBox, ButtonContainer, TypographyError } from './style'
+import { InputField, FormPaper, AddButton, 
+         InputBox, ButtonContainer, TypographyError } from '../../../../Styles/Styles'
 import AlertBox from "../../../../components/AlertBox/AlertBox"
 
 const EditServiceForm = () => {
@@ -36,7 +37,6 @@ const EditServiceForm = () => {
     },
     validationSchema: EditServiceValidation,
     onSubmit: (values) => {
-      console.log(values)
       dispatch(updateService(values))
       dispatch(clearEdittingServiceMsg())
     }

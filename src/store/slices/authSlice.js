@@ -14,6 +14,7 @@ export const login = createAsyncThunk("auth/login", async (userData, { rejectWit
 }
 });
 
+
   export const logout = createAsyncThunk("auth/logout", async () => {
     const response = await axiosInstance.post('/logout')
     if (response.status === 200) {  
@@ -25,11 +26,13 @@ export const login = createAsyncThunk("auth/login", async (userData, { rejectWit
 
 const initialState= {  
     user: null,
+    userId: null,
     roles: null,  
     token: null,
     isAuthenticated: false,   
     loading: false, 
-    error: null,  
+    error: null,
+    loadingLogout: false 
   }
 
 const authSlice = createSlice({
@@ -47,6 +50,7 @@ const authSlice = createSlice({
         builder.addCase(login.fulfilled, (state, action) => {
             state.loading = false
             state.user = action.payload.name
+            state.userId = action.payload.id
             state.roles = action.payload.roles[0]
             state.isAuthenticated = true
             const { access_token } = action.payload;
@@ -60,12 +64,18 @@ const authSlice = createSlice({
             state.token = null
             state.error = 'Maybe your email or password is invalid, or something is wrong Try again!'
         })
-
+        builder.addCase(logout.pending, (state) => {
+          state.loadingLogout = true
+        })
         builder.addCase(logout.fulfilled, (state) => {
+          state.loadingLogout = false
             state.user = null
             state.isAuthenticated = false
             localStorage.removeItem('token')
         })
+        builder.addCase(logout.rejected, (state) => {
+          state.loadingLogout = false
+      })
     }
 })
 

@@ -1,11 +1,11 @@
 import { Box, Typography, TableContainer, Paper, 
          Table, TableHead, TableRow, TableCell,
-         Snackbar, Alert } from '@mui/material'
+         TableBody, Snackbar, Alert } from '@mui/material'
 import PageTitle from '../../../../components/PageTitle/PageTitle'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { getSchedules } from '../../store/slices/schedulesSlice'
-import { StyledTableRow, ActionButton } from './style'
+import { StyledTableRow, ActionButton } from '../../../../Styles/Styles'
 import { useNavigate } from 'react-router-dom'
 import { deleteScheduleItem, clearScheduleMsg } from '../../store/slices/deleteScheduleSlice'
 import DeleteDialog from '../../../../components/DeleteDialog/DeleteDialog'
@@ -51,14 +51,12 @@ const SchedulesTable = () => {
      dispatch(clearScheduleMsg())
   }, [])
 
-  console.log(schedules)
-
   return (
     <Box sx={{p: '1rem'}}>
       <PageTitle title='Schedules:' />
         {loading && <Typography variant='h3'>Loading...</Typography>}
         {!loading && error && <Typography variant='h3'>{error}</Typography>}
-        {!loading && schedules && 
+        {!loading && schedules.length ? 
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 1120 }}>
             <TableHead sx={{background: '#2e7c6747'}}>
@@ -72,7 +70,8 @@ const SchedulesTable = () => {
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
-            {schedules?.map(schedule => (
+            <TableBody>
+              {schedules?.map(schedule => (
               <StyledTableRow key={schedule.id}>
                  <TableCell>{schedule.id}</TableCell>
                  <TableCell>{schedule.doctor_id}</TableCell>
@@ -88,9 +87,15 @@ const SchedulesTable = () => {
                    <ActionButton onClick={() => handleDeleteClick(schedule.id)}>Delete</ActionButton>
                  </TableCell>
               </StyledTableRow>
-            ))}
+              ))}
+            </TableBody>
           </Table>
         </TableContainer>
+        : 
+            !loading && !error && !schedules.length ? <Typography variant='h3'>
+                                                         No schedules added
+                                                      </Typography>
+                                                    : null
         }
 
         {idToDelete && <DeleteDialog 

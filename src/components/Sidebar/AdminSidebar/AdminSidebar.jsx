@@ -1,5 +1,4 @@
-import { Typography, List, ListItem, ListItemText, Button,Collapse } from "@mui/material"
-//import profileImg from '../../assets/profileImg.jpg'
+import { Typography, List, ListItem, ListItemText, Button } from "@mui/material"
 import { NavLink, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useDispatch, useSelector } from "react-redux";
@@ -11,19 +10,20 @@ import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import { SidebarBox, LogoBox, LogoTypography, ArrowIconButton, 
          ProfileBox, LogoutBox, LogoutTypography } from "../SidebarStyle";
-import { useEffect, useState } from "react";
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
+import { useEffect } from "react";
 import { logout } from "../../../store/slices/authSlice";
 import { getAccountInfo } from "../../../modules/Account/store/slices/accountSlice";
 import MedicationLiquidIcon from '@mui/icons-material/MedicationLiquid'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
-import MoodBadIcon from '@mui/icons-material/MoodBad';
+import MoodBadIcon from '@mui/icons-material/MoodBad'
+import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety'
+import SidebarListItem from '../../SidebarListItem/SidebarListItem'
+import PersonRemoveAlt1Icon from '@mui/icons-material/PersonRemoveAlt1';
 
 const AdminSidebar = () => {
 
   const {isCollapsed} = useSelector(state => state.sidebar)
-  const {isAuthenticated} = useSelector(state => state.auth)
+  const {isAuthenticated, loadingLogout} = useSelector(state => state.auth)
   const {accountInfo} = useSelector(state => state.account)
 
   const dispatch = useDispatch()
@@ -37,16 +37,6 @@ const AdminSidebar = () => {
     dispatch(setIsCollapsed(false))
  }
 
-  const [openDropdown, setOpenDropdown] = useState({
-    departments: false,
-    rooms: false,
-    doctors: false,
-    patients: false,
-    specializations: false,
-    schedules: false,
-    services: false,
-  });
-
   useEffect(() => {
     if(!isAuthenticated){
       navigate('/login')
@@ -56,6 +46,19 @@ const AdminSidebar = () => {
   const handleLogout = () => {
     dispatch(logout())
   }
+ 
+
+  const listData = [
+    {icon: DomainIcon, mainTitle: 'Departments', viewPath: 'departments', viewLabel: 'View Departments', addPath: 'addDepartment', addLabel: 'Add Department' },
+    {icon: MeetingRoomIcon, mainTitle: 'Rooms', viewPath: 'rooms', viewLabel: 'View Rooms', addPath: 'addRoom', addLabel: 'Add Room' },
+    {icon: MedicalServicesIcon, mainTitle: 'Doctors', viewPath: 'doctors', viewLabel: 'View Doctors', addPath: 'addDoctor', addLabel: 'Add Doctor' },
+    {icon: MedicationLiquidIcon, mainTitle: 'Specializations', viewPath: 'specializations', viewLabel: 'View', addPath: 'addSpecialization', addLabel: 'Add' },
+    {icon: CalendarMonthIcon, mainTitle: 'Schedules', viewPath: 'schedules', viewLabel: 'View Schedules', addPath: 'addSchedules', addLabel: 'Add Schedules' },
+    {icon: MoodBadIcon, mainTitle: 'Patients', viewPath: 'patients', viewLabel: 'View Patients', addPath: 'addPatient', addLabel: 'Add Patient' },
+    {icon: MedicalServicesIcon, mainTitle: 'Services', viewPath: 'services', viewLabel: 'View Services', addPath: 'addService', addLabel: 'Add Service' },
+    {icon: HealthAndSafetyIcon, mainTitle: 'Conditions', viewPath: 'medicalConditions', viewLabel: 'View', addPath: 'addMedical', addLabel: 'Add' },
+    {icon: PersonRemoveAlt1Icon, mainTitle: "Patient's visits", viewPath: 'visits', viewLabel: 'View Visits', addPath: 'registerVisit', addLabel: 'Register visit' },
+  ]
 
   return (
     <>
@@ -69,7 +72,6 @@ const AdminSidebar = () => {
               </ArrowIconButton>
            </LogoBox>
            <ProfileBox>
-               {/* <img src={profileImg} alt='profileImg' style={{width: '40px', height: '40px', borderRadius: '50%'}}/> */}
                <Typography variant="h6" sx={{color: '#595353'}}>{accountInfo?.name}</Typography>
            </ProfileBox>
            <List>
@@ -77,174 +79,31 @@ const AdminSidebar = () => {
             <NavLink to="dashboard" style={({isActive}) => ({
                                           color: isActive ? '#2e7c67' : '#595353',
                                           textDecoration: 'none'})}>
-              <ListItem>
+              <ListItem sx={{pb: '0',pt: '5px'}}>
                   <HomeIcon sx={{color: '#2e7c67'}}/>
                   <ListItemText primary="Dashboard" sx={{ml: '0.5rem'}} />
               </ListItem>
             </NavLink>
-
-            <ListItem onClick={() => 
-                        setOpenDropdown((prevState) => ({...prevState, departments: (!openDropdown.departments)}))
-                        }>
-                  <DomainIcon sx={{color: '#2e7c67'}}/>
-                  <ListItemText primary="Departments" sx={{ml: '0.5rem',color: '#595353'}} />
-                  {openDropdown.departments ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={openDropdown.departments} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                     <NavLink to="departments" style={({isActive}) => ({
-                                              color: isActive ? '#2e7c67' : '#595353',
-                                              textDecoration: 'none'})}>
-                       <ListItemText sx={{pl: '30px'}} primary="View Departments" />
-                     </NavLink>
-                     <NavLink to="addDepartment" style={({isActive}) => ({
-                                              color: isActive ? '#2e7c67' : '#595353',
-                                              textDecoration: 'none'})}>
-                        <ListItemText sx={{pl: '30px'}} primary="Add Department" />
-                     </NavLink>  
-                </List>
-            </Collapse>
-
-            <ListItem onClick={() => 
-                         setOpenDropdown((prevState) => ({...prevState, rooms: (!openDropdown.rooms)}))
-                       }>
-                  <MeetingRoomIcon sx={{color: '#2e7c67'}}/>
-                  <ListItemText primary="Rooms" sx={{ml: '0.5rem',color: '#595353'}} />
-                  {openDropdown.rooms ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={openDropdown.rooms} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                     <NavLink to="rooms" style={({isActive}) => ({
-                                              color: isActive ? '#2e7c67' : '#595353',
-                                              textDecoration: 'none'})}>
-                       <ListItemText sx={{pl: '30px'}} primary="View Rooms" />
-                     </NavLink>
-                     <NavLink to="addRoom" style={({isActive}) => ({
-                                              color: isActive ? '#2e7c67' : '#595353',
-                                              textDecoration: 'none'})}>
-                        <ListItemText sx={{pl: '30px'}} primary="Add Room" />
-                     </NavLink>  
-                </List>
-            </Collapse>
-
-            <ListItem onClick={() => 
-                         setOpenDropdown((prevState) => ({...prevState, doctors: (!openDropdown.doctors)}))
-                       }>
-                  <MedicalServicesIcon sx={{color: '#2e7c67'}}/>
-                  <ListItemText primary="Doctors" sx={{ml: '0.5rem',color: '#595353'}} />
-                  {openDropdown.doctors ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={openDropdown.doctors} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                     <NavLink to="doctors" style={({isActive}) => ({
-                                              color: isActive ? '#2e7c67' : '#595353',
-                                              textDecoration: 'none'})}>
-                       <ListItemText sx={{pl: '30px'}} primary="View Doctors" />
-                     </NavLink>
-                     <NavLink to="addDoctor" style={({isActive}) => ({
-                                              color: isActive ? '#2e7c67' : '#595353',
-                                              textDecoration: 'none'})}>
-                        <ListItemText sx={{pl: '30px'}} primary="Add Doctor" />
-                     </NavLink>
-                </List>
-            </Collapse>
-
-            <ListItem onClick={() => 
-                         setOpenDropdown((prevState) => ({...prevState, specializations: (!openDropdown.specializations)}))
-                       }>
-                  <MedicationLiquidIcon sx={{color: '#2e7c67'}}/>
-                  <ListItemText primary="Specializations" sx={{ml: '0.5rem',color: '#595353'}} />
-                  {openDropdown.specializations ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={openDropdown.specializations} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                     <NavLink to="specializations" style={({isActive}) => ({
-                                              color: isActive ? '#2e7c67' : '#595353',
-                                              textDecoration: 'none'})}>
-                        <ListItemText sx={{pl: '30px'}} primary="Specializations" />
-                     </NavLink>
-                     <NavLink to="addSpecialization" style={({isActive}) => ({
-                                              color: isActive ? '#2e7c67' : '#595353',
-                                              textDecoration: 'none'})}>
-                        <ListItemText sx={{pl: '30px'}} primary="Add Specialization" />
-                     </NavLink>  
-                </List>
-            </Collapse>
-
-            <ListItem onClick={() => 
-                         setOpenDropdown((prevState) => ({...prevState, schedules: (!openDropdown.schedules)}))
-                       }>
-                  <CalendarMonthIcon sx={{color: '#2e7c67'}}/>
-                  <ListItemText primary="Schedules" sx={{ml: '0.5rem',color: '#595353'}} />
-                  {openDropdown.schedules ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={openDropdown.schedules} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                  <NavLink to="schedules" style={({isActive}) => ({
-                                              color: isActive ? '#2e7c67' : '#595353',
-                                              textDecoration: 'none'})}>
-                        <ListItemText sx={{pl: '30px'}} primary="View Schedules" />
-                  </NavLink>
-                  <NavLink to="addSchedules" style={({isActive}) => ({
-                                              color: isActive ? '#2e7c67' : '#595353',
-                                              textDecoration: 'none'})}>
-                        <ListItemText sx={{pl: '30px'}} primary="Add Schedules" />
-                  </NavLink>
-                </List>
-              </Collapse>
-            
-             <ListItem onClick={() => 
-                         setOpenDropdown((prevState) => ({...prevState, patients: (!openDropdown.patients)}))
-                       }>
-                  <MoodBadIcon sx={{color: '#2e7c67'}}/>
-                  <ListItemText primary="Patients" sx={{ml: '0.5rem',color: '#595353'}} />
-                  {openDropdown.patients ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={openDropdown.patients} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                     <NavLink to="patients" style={({isActive}) => ({
-                                              color: isActive ? '#2e7c67' : '#595353',
-                                              textDecoration: 'none'})}>
-                       <ListItemText sx={{pl: '30px'}} primary="View Patients" />
-                     </NavLink>
-                     <NavLink to="addPatient" style={({isActive}) => ({
-                                              color: isActive ? '#2e7c67' : '#595353',
-                                              textDecoration: 'none'})}>
-                        <ListItemText sx={{pl: '30px'}} primary="Add Patient" />
-                     </NavLink>  
-                </List>
-            </Collapse>
-
-           
-
-           <ListItem onClick={() => 
-                         setOpenDropdown((prevState) => ({...prevState, services: (!openDropdown.services)}))
-                       }>
-                  <MedicalServicesIcon sx={{color: '#2e7c67'}}/>
-                  <ListItemText primary="Services" sx={{ml: '0.5rem',color: '#595353'}} />
-                  {openDropdown.services ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={openDropdown.services} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                     <NavLink to="services" style={({isActive}) => ({
-                                              color: isActive ? '#2e7c67' : '#595353',
-                                              textDecoration: 'none'})}>
-                       <ListItemText sx={{pl: '30px'}} primary="View Services" />
-                     </NavLink>
-                     <NavLink to="addService" style={({isActive}) => ({
-                                              color: isActive ? '#2e7c67' : '#595353',
-                                              textDecoration: 'none'})}>
-                        <ListItemText sx={{pl: '30px'}} primary="Add Service" />
-                     </NavLink>  
-                </List>
-            </Collapse>
-
+            {
+              listData?.map((item,index) => (
+                <SidebarListItem
+                             key={index}
+                             Icon={item.icon}
+                             mainTitle={item.mainTitle} 
+                             viewPath={item.viewPath} 
+                             viewLabel={item.viewLabel} 
+                             addPath={item.addPath} 
+                             addLabel={item.addLabel} />
+              ))
+            }
           </List>
 
            <LogoutBox>
-             <Button onClick={handleLogout}>
+             <Button sx={{textTransform: 'capitalize'}} onClick={handleLogout}>
               <LogoutIcon sx={{color: '#2e7c67'}}/>
-              <LogoutTypography variant="body2">Logout</LogoutTypography>
+              <LogoutTypography variant="body2">
+                {loadingLogout ? "Logging out..." : "Logout"}
+              </LogoutTypography>
              </Button>
            </LogoutBox>
            

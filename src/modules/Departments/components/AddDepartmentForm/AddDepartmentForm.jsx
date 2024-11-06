@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material'
-import { InputField, FormPaper, AddButton, InputBox, ButtonContainer, TypographyError } from './style'
+import { InputField, FormPaper, AddButton, InputBox, 
+         ButtonContainer, TypographyError } from '../../../../Styles/Styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { addNewDepartment, clearAddingMessage } from '../../store/slices/AddDepartmentSlice'
 import * as Yup from 'yup';  
